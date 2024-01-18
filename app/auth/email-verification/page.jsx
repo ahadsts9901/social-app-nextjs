@@ -14,7 +14,7 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
-import { v2Theme } from '@/app/Mui/client.mjs';
+import { theme, v2Theme } from '@/app/Mui/client.mjs';
 import PasswordMUI from '@/app/Mui/components/PasswordMUI';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
@@ -40,17 +40,14 @@ export default function EmailVerification() {
     const router = useRouter()
     const [otp, setOtp] = React.useState('')
 
-    const handleSubmit = (event) => {
-        event.preventDefault();
-        const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
-    };
-
     const handleChange = (newValue) => {
+
         setOtp(newValue)
+
+        if(newValue.length === 6){
+            console.log(newValue);
+        }
+
     }
 
     return (
@@ -77,11 +74,11 @@ export default function EmailVerification() {
                     }}>
                         Enter 6 digit code sent to
                     </Typography>
-                    <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1, width: "100%" }}>
+                    <Box noValidate sx={{ mt: 1, width: "100%" }}>
                         <MuiOtpInput type="number" length={6} value={otp} onChange={handleChange}
-                        style={{
-                            margin: "32px 0",
-                        }}
+                            style={{
+                                margin: "32px 0",
+                            }}
                         />
                         <Box style={{
                             display: "flex",
@@ -110,28 +107,12 @@ export default function EmailVerification() {
                                 }}
                                 >Back</span>
                             </Button>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2, width: "120px" }}
-                                style={{
-                                    display: "flex",
-                                    justifyContent: "flex-end",
-                                    alignItems: "center",
-                                }}
-                            >
-                                <span style={{
-                                    width: "100%",
-                                    textAlign: "right",
-                                    paddingRight: "8px"
-                                }}
-                                >Proceed</span>
-                                <ArrowForwardIos style={{
-                                    fontSize: "16px",
-                                    marginRight: "4px"
-                                }} />
-                            </Button>
+                            <Typography component="p" variant="p" style={{
+                                color: theme.palette.text.primary,
+                                textDecoration: "underline",
+                                textDecorationColor: theme.palette.text.primary,
+                                cursor: "pointer",
+                            }}>Resend OTP</Typography>
                         </Box>
                     </Box>
                 </Box>

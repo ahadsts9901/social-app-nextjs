@@ -23,17 +23,21 @@ export default function PasswordMUI(props) {
         event.preventDefault();
     };
 
+    const handleChange = (event) => {
+        // Pass the password value to the parent component via the onChange callback
+        if (props.onChange) {
+            props.onChange(event.target.value);
+        }
+    };
+
     return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap' }}>
             <FormControl sx={{ width: '100%' }} variant="outlined">
-                <InputLabel htmlFor="outlined-adornment-password"
-                    style={{
-                        backgroundColor: theme.palette.background.default,
-                    }}
-                >{props.label}</InputLabel>
+                <InputLabel htmlFor="outlined-adornment-password">{props.label}</InputLabel>
                 <OutlinedInput
                     id="outlined-adornment-password"
                     type={showPassword ? 'text' : 'password'}
+                    onChange={handleChange} // Call the handleChange function on input change
                     endAdornment={
                         <InputAdornment position="end">
                             <IconButton
@@ -46,7 +50,7 @@ export default function PasswordMUI(props) {
                             </IconButton>
                         </InputAdornment>
                     }
-                    label="Password"
+                    label={props.label}
                 />
             </FormControl>
         </Box>

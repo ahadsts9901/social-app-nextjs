@@ -20,3 +20,8 @@
 body {
   color: rgb(var(--foreground-rgb));
 }
+
+
+.mui-tccdxk{
+  gap: 0.2em!important;
+}

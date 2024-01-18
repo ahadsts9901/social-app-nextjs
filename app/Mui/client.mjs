@@ -17,7 +17,7 @@ export const theme = {
             light: '#BCD4DC',
             main: '#9BBECA',
             dark: '#79A9B9',
-            contrastText: '#111E22',
+            contrastText: '#303030',
         },
         success: {
             light: '#19B373',

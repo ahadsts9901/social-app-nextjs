@@ -16,6 +16,8 @@ import Container from '@mui/material/Container';
 import { ThemeProvider } from '@mui/material/styles';
 import { v2Theme } from '@/app/Mui/client.mjs';
 import PasswordMUI from '@/app/Mui/components/PasswordMUI';
+import AlertMUI from '@/app/Mui/components/AlertMUI';
+import { emailPattern, passwordPattern } from '@/app/core.mjs';
 
 function Copyright(props) {
   return (
@@ -33,17 +35,39 @@ function Copyright(props) {
 }
 
 export default function SignIn() {
+
+  const [password, setPassword] = React.useState("")
+  const [clientErrorMessage, setClientErrorMessage] = React.useState(null)
+
   const handleSubmit = (event) => {
+
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
+
+    const email = data.get('email')
+
+    if (!emailPattern.test(email) || !passwordPattern.test(password)) {
+      setClientErrorMessage("Email or Password incorrect")
+      setTimeout(() => {
+        setClientErrorMessage(null)
+      }, 2000)
+      return
+    }
+
+    const body = {
+      email: email,
+      password: password
+    }
+
+    console.log(body);
+
   };
 
   return (
     <ThemeProvider theme={v2Theme}>
+      {
+        clientErrorMessage && <AlertMUI status="error" text={clientErrorMessage} />
+      }
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -72,9 +96,13 @@ export default function SignIn() {
               autoFocus
               style={{
                 marginBottom: "16px",
-              }} 
+              }}
             />
-            <PasswordMUI label="Password * "/>
+            <PasswordMUI
+              label="Password * "
+              onChange={(value) => setPassword(value)}
+              name="password"
+            />
             <FormControlLabel style={{
               marginTop: "16px"
             }}
@@ -90,7 +118,7 @@ export default function SignIn() {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs style={{marginRight:"16px"}}>
+              <Grid item xs style={{ marginRight: "16px" }}>
                 <Link href="/auth/forgot-password" variant="body2">
                   Forgot password?
                 </Link>

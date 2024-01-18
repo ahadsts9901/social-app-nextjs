@@ -18,6 +18,8 @@ import { v2Theme } from '@/app/Mui/client.mjs';
 import PasswordMUI from '@/app/Mui/components/PasswordMUI';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
+import { emailPattern } from '@/app/core.mjs';
+import AlertMUI from '@/app/Mui/components/AlertMUI';
 
 function Copyright(props) {
     return (
@@ -37,18 +39,36 @@ function Copyright(props) {
 export default function ForgotPassword() {
 
     const router = useRouter()
+    const [clientErrorMessage, setClientErrorMessage] = React.useState(null)
 
     const handleSubmit = (event) => {
+
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
+        const email = data.get('email')
+
+        if (!emailPattern.test(email)) {
+            setClientErrorMessage("Invalid Email")
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+            return;
+        }
+
+        const body = {
+            email: email
+        }
+
+        console.log(body);
+
     };
 
     return (
         <ThemeProvider theme={v2Theme}>
+            {
+                clientErrorMessage && <AlertMUI status="error" text={clientErrorMessage} />
+            }
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -93,7 +113,7 @@ export default function ForgotPassword() {
                                     justifyContent: "flex-start",
                                     alignItems: "center",
                                 }}
-                                onClick={()=>router.back()}
+                                onClick={() => router.back()}
                             >
                                 <ArrowBackIos style={{
                                     fontSize: "16px",

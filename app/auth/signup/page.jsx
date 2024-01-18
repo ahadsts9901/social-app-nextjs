@@ -18,7 +18,9 @@ import { ThemeProvider } from '@mui/material/styles';
 
 import { v2Theme } from '../../Mui/client.mjs';
 import PasswordMUI from '@/app/Mui/components/PasswordMUI';
+import AlertMUI from '@/app/Mui/components/AlertMUI';
 // import { ThemeProvider } from '@emotion/react';
+import { firstNamePattern, lastNamePattern, emailPattern, passwordPattern } from '@/app/core.mjs';
 
 function Copyright(props) {
     return (
@@ -36,17 +38,76 @@ function Copyright(props) {
 }
 
 export default function SignUp() {
+
+    const [password, setPassword] = React.useState("")
+    const [repeatPassword, setRepeatPassword] = React.useState("")
+    const [clientErrorMessage, setClientErrorMessage] = React.useState(null)
+
     const handleSubmit = (event) => {
+
         event.preventDefault();
         const data = new FormData(event.currentTarget);
-        console.log({
-            email: data.get('email'),
-            password: data.get('password'),
-        });
+
+        const firstName = data.get('firstName')
+        const lastName = data.get('lastName')
+        const email = data.get('email')
+
+        if (!firstNamePattern.test(firstName)) {
+            setClientErrorMessage("First Name must between 2 to 15 characters long")
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+            return
+        }
+
+        if (!lastNamePattern.test(lastName)) {
+            setClientErrorMessage("Last Name must between 2 to 15 characters long")
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+            return
+        }
+
+        if (!emailPattern.test(email)) {
+            setClientErrorMessage("Email pattern is invalid")
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+            return
+        }
+
+        if (!passwordPattern.test(password)) {
+            setClientErrorMessage("Password must be alphanumeric and 8 to 24 characters long")
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+            return
+        }
+
+        if (password !== repeatPassword) {
+            setClientErrorMessage("Passwords do not match")
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+            return
+        }
+
+        const dataToSend = {
+            firstName: firstName,
+            lastName: lastName,
+            email: email,
+            password: password
+        }
+
+        console.log(dataToSend);
+
     };
 
     return (
         <ThemeProvider theme={v2Theme}>
+            {
+                clientErrorMessage && <AlertMUI status="error" text={clientErrorMessage} />
+            }
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
                 <Box
@@ -97,10 +158,18 @@ export default function SignUp() {
                                 />
                             </Grid>
                             <Grid item xs={12}>
-                                <PasswordMUI label="Password * " />
+                                <PasswordMUI
+                                    name="password"
+                                    label="Password * "
+                                    onChange={(value) => setPassword(value)}
+                                />
                             </Grid>
                             <Grid item xs={12}>
-                                <PasswordMUI label="Repeat Password * " />
+                                <PasswordMUI
+                                    name="repeatPassword"
+                                    label="Repeat Password * "
+                                    onChange={(value) => setRepeatPassword(value)}
+                                />
                             </Grid>
                             <Grid item xs={12}>
                                 <FormControlLabel
