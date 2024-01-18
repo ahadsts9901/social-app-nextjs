@@ -90,8 +90,8 @@ export default function SignIn() {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="#" variant="body2">
+              <Grid item xs style={{marginRight:"16px"}}>
+                <Link href="/auth/forgot-password" variant="body2">
                   Forgot password?
                 </Link>
               </Grid>
