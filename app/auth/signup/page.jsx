@@ -21,6 +21,7 @@ import PasswordMUI from '@/app/Mui/components/PasswordMUI';
 import AlertMUI from '@/app/Mui/components/AlertMUI';
 // import { ThemeProvider } from '@emotion/react';
 import { firstNamePattern, lastNamePattern, emailPattern, passwordPattern } from '@/app/core.mjs';
+import axios from 'axios';
 
 function Copyright(props) {
     return (
@@ -43,7 +44,7 @@ export default function SignUp() {
     const [repeatPassword, setRepeatPassword] = React.useState("")
     const [clientErrorMessage, setClientErrorMessage] = React.useState(null)
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
 
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -99,7 +100,15 @@ export default function SignUp() {
             password: password
         }
 
-        console.log(dataToSend);
+        try {
+
+            const response = await axios.post(`/api/auth/signup`, dataToSend)
+
+            console.log(response.data);
+
+        } catch (error) {
+            console.error("error", error);
+        }
 
     };
 
