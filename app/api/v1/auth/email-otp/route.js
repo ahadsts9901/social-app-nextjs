@@ -103,7 +103,7 @@ export const POST = async (req, res) => {
             user.email,
             user.firstName,
             `Hi ${user.firstName}! verify your email`,
-            `Hi ${user.firstName}! here is your email verification OTP code. This is valid for 15 minutes. Code: <b>${otpCode}<b>`
+            `Hi ${user.firstName}! here is your email verification OTP code. This code is valid for 15 minutes. <h2>${otpCode}</h2>`
         );
 
         return NextResponse.json({
