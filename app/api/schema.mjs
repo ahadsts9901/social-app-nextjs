@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 
 export const emailPattern = /^[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-export const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?!.*\s{2})[a-zA-Z\d ]{8,16}$/;
+export const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?!.*\s{2})[a-zA-Z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,24}$/;
 export const otpPattern = /^[a-zA-Z0-9]{6}$/
 export const profilePicturePattern = /^https:\/\/[^\s\/$.?#].[^\s]*$/;
 export const firstNamePattern = /^[a-zA-Z0-9 !@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{2,15}$/;
@@ -21,14 +21,14 @@ let userSchema = new mongoose.Schema({
     },
     firstName: {
         type: String,
-        required: [true, 'first name is required'],
+        required: true,
         minlength: 2,
         maxlength: 15,
         trim: true,
     },
     lastName: {
         type: String,
-        required: [true, 'last name is required'],
+        required: true,
         minlength: 2,
         maxlength: 15,
         trim: true,
@@ -36,7 +36,7 @@ let userSchema = new mongoose.Schema({
     email: {
         type: String,
         unique: true,
-        required: [true],
+        required: true,
         minlength: 3,
         maxlength: 100,
         trim: true,
@@ -44,7 +44,7 @@ let userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: [true, 'password is required'],
+        required: true,
     },
     isSuspended: {
         type: Boolean,
@@ -62,6 +62,11 @@ let userSchema = new mongoose.Schema({
         type: Boolean,
         default: false
     },
+    provider: {
+        type: String,
+        required: true,
+        enum: ['google', 'facebook'],
+    },
     createdOn: {
         type: Date,
         default: Date.now
@@ -75,4 +80,38 @@ userSchema.pre('save', function (next) {
     next();
 });
 
-export const userModel = mongoose.model("users", userSchema);
+export const userModel = mongoose.models.users || mongoose.model('users', userSchema)
+
+// otp schema
+let otpSchemaEmail = new mongoose.Schema({
+    email: {
+        type: String,
+        unique: false,
+        required: [true],
+        minlength: 3,
+        maxlength: 100,
+        trim: true,
+        match: emailPattern
+    },
+    otpCodeHash: {
+        type: String,
+        required: true,
+    },
+    isUsed: {
+        type: Boolean,
+        default: false
+    },
+    createdOn: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+otpSchemaEmail.pre('save', function (next) {
+    if (this.email) {
+        this.email = this.email.toLowerCase();
+    }
+    next();
+});
+
+export const otpModelEmail = mongoose.models["email-otps"] || mongoose.model("email-otps", otpSchemaEmail);

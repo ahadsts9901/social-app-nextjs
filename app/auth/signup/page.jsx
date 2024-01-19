@@ -22,6 +22,7 @@ import AlertMUI from '@/app/Mui/components/AlertMUI';
 // import { ThemeProvider } from '@emotion/react';
 import { firstNamePattern, lastNamePattern, emailPattern, passwordPattern } from '@/app/core.mjs';
 import axios from 'axios';
+import { useRouter } from 'next/navigation';
 
 function Copyright(props) {
     return (
@@ -43,6 +44,10 @@ export default function SignUp() {
     const [password, setPassword] = React.useState("")
     const [repeatPassword, setRepeatPassword] = React.useState("")
     const [clientErrorMessage, setClientErrorMessage] = React.useState(null)
+    const [clientSuccessMessage, setClientSuccessMessage] = React.useState(null)
+    const [isLoading, setIsLoading] = React.useState(false)
+
+    const router = useRouter()
 
     const handleSubmit = async (event) => {
 
@@ -100,14 +105,50 @@ export default function SignUp() {
             password: password
         }
 
+        setIsLoading(true)
+
         try {
+            const response = await axios.post(`/api/v1/auth/signup`, dataToSend, {
+                withCredentials: true,
+            });
 
-            const response = await axios.post(`/api/auth/signup`, dataToSend)
+            if (response.data.message !== "error") {
 
-            console.log(response.data);
+                try {
+
+                    const sendMailResponse = await axios.post(`/api/v1/auth/email-otp`, {
+                        email: email
+                    }, { withCredentials: true })
+
+                    setIsLoading(false)
+                    
+                    router.push("/auth/email-verification")
+                } catch (error) {
+                    console.log(error);
+                    setIsLoading(false)
+                    setClientErrorMessage("An unknown error occured")
+                    setTimeout(() => {
+                        setClientErrorMessage(null)
+                    }, 2000)
+                }
+
+            } else {
+                setClientErrorMessage("An unknown error occured")
+                setTimeout(() => {
+                    setClientErrorMessage(null)
+                }, 2000)
+            }
+
+            setTimeout(() => {
+                setClientSuccessMessage(null)
+            }, 2000)
 
         } catch (error) {
-            console.error("error", error);
+            setIsLoading(false)
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+            return
         }
 
     };
@@ -116,6 +157,10 @@ export default function SignUp() {
         <ThemeProvider theme={v2Theme}>
             {
                 clientErrorMessage && <AlertMUI status="error" text={clientErrorMessage} />
+            }
+
+            {
+                clientSuccessMessage && <AlertMUI status="success" text={clientSuccessMessage} />
             }
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
@@ -191,9 +236,15 @@ export default function SignUp() {
                             type="submit"
                             fullWidth
                             variant="contained"
+                            disabled={isLoading}
                             sx={{ mt: 3, mb: 2 }}
                         >
-                            Sign Up
+                            {
+                                isLoading ? <span className="buttonLoader"></span> : null
+                            }
+                            {
+                                isLoading ? "Processing" : "Sign Up"
+                            }
                         </Button>
                         <Grid container justifyContent="flex-end">
                             <Grid item>

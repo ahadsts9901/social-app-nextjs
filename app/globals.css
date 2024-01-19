@@ -3,7 +3,7 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
+* {
   font-family: "League Spartan", sans-serif;
 }
 
@@ -21,7 +21,28 @@ body {
   color: rgb(var(--foreground-rgb));
 }
 
+.mui-tccdxk {
+  gap: 0.2em !important;
+}
 
-.mui-tccdxk{
-  gap: 0.2em!important;
+.buttonLoader {
+  width:18px;
+  height:18px;
+  border: 2px solid;
+  border-bottom-color: transparent;
+  border-radius: 50%;
+  display: inline-block;
+  box-sizing: border-box;
+  animation: rotation 1s linear infinite;
+  margin-right: 16px;
+}
+
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

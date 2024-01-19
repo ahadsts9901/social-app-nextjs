@@ -6,7 +6,7 @@ const uri = process.env.MONGO_URI
 async function run() {
     try {
         await mongoose.connect(uri, {
-            dbName: 'cruddb',
+            dbName: 'we-app-next',
             useNewUrlParser: true,
             useUnifiedTopology: true,
             retryWrites: false
