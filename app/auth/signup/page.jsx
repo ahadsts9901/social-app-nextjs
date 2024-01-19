@@ -121,8 +121,8 @@ export default function SignUp() {
                     }, { withCredentials: true })
 
                     setIsLoading(false)
-                    
-                    router.push("/auth/email-verification")
+
+                    router.push(`/auth/email-verification?email=${email}`)
                 } catch (error) {
                     console.log(error);
                     setIsLoading(false)

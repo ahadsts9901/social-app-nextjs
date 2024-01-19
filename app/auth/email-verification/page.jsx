@@ -17,7 +17,8 @@ import { ThemeProvider } from '@mui/material/styles';
 import { theme, v2Theme } from '@/app/Mui/client.mjs';
 import PasswordMUI from '@/app/Mui/components/PasswordMUI';
 import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
-import { useRouter } from 'next/navigation';
+import { useRouter as useRouterNavigation } from 'next/navigation';
+import { useRouter as useRouterRouter } from 'next/router';
 import { MuiOtpInput } from 'mui-one-time-password-input'
 
 function Copyright(props) {
@@ -37,14 +38,22 @@ function Copyright(props) {
 
 export default function EmailVerification() {
 
-    const router = useRouter()
+    const [mail, setMail] = React.useState("")
+
+    React.useEffect(() => {
+        const params = useRouterRouter()
+        const email = params.query.email
+        setMail(email)
+    }, [mail])
+
+    const router = useRouterNavigation()
     const [otp, setOtp] = React.useState('')
 
     const handleChange = (newValue) => {
 
         setOtp(newValue)
 
-        if(newValue.length === 6){
+        if (newValue.length === 6) {
             console.log(newValue);
         }
 
@@ -72,7 +81,7 @@ export default function EmailVerification() {
                         textAlign: "center",
                         marginTop: "16px",
                     }}>
-                        Enter 6 digit code sent to
+                        Enter 6 digit code sent to: {mail}
                     </Typography>
                     <Box noValidate sx={{ mt: 1, width: "100%" }}>
                         <MuiOtpInput type="number" length={6} value={otp} onChange={handleChange}
