@@ -18,14 +18,14 @@ export const POST = async(req, res) => {
         }, { status: 400 })
     }
 
-    if (!emailPattern.test(email)) {
+    if (!emailPattern.test(email.toLowerCase())) {
         return NextResponse.json({
             message: "Email pattern is invalid",
         }, { status: 400 })
     }
 
     // get user
-    const user = await userModel.findOne({ email: email }).exec();
+    const user = await userModel.findOne({ email: email.toLowerCase() }).exec();
 
     if (!user) {
         return NextResponse.json({
@@ -83,7 +83,7 @@ export const POST = async(req, res) => {
     // generate otp code
     const otpCode = otpGenerator.generate(6, {
         upperCaseAlphabets: false,
-        lowerCaseAlphabets: true,
+        lowerCaseAlphabets: false,
         specialChars: false
     });
 

@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 export const emailPattern = /^[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 export const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?!.*\s{2})[a-zA-Z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,24}$/;
-export const otpPattern = /^[a-zA-Z0-9]{6}$/
+export const otpPattern = /^[a-z0-9]{6}$/
 export const profilePicturePattern = /^https:\/\/[^\s\/$.?#].[^\s]*$/;
 export const firstNamePattern = /^[a-zA-Z0-9 !@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{2,15}$/;
 export const lastNamePattern = /^[a-zA-Z0-9 !@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{2,15}$/;
@@ -82,7 +82,7 @@ userSchema.pre('save', function (next) {
 
 export const userModel = mongoose.models.users || mongoose.model('users', userSchema)
 
-// otp schema
+// email otp schema
 let otpSchemaEmail = new mongoose.Schema({
     email: {
         type: String,
@@ -115,3 +115,37 @@ otpSchemaEmail.pre('save', function (next) {
 });
 
 export const otpModelEmail = mongoose.models["email-otps"] || mongoose.model("email-otps", otpSchemaEmail);
+
+//  otp schema
+let otpSchemaPassword = new mongoose.Schema({
+    email: {
+        type: String,
+        unique: false,
+        required: [true],
+        minlength: 3,
+        maxlength: 100,
+        trim: true,
+        match: emailPattern
+    },
+    otpCodeHash: {
+        type: String,
+        required: true,
+    },
+    isUsed: {
+        type: Boolean,
+        default: false
+    },
+    createdOn: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+otpSchemaPassword.pre('save', function (next) {
+    if (this.email) {
+        this.email = this.email.toLowerCase();
+    }
+    next();
+});
+
+export const otpModelPassword = mongoose.models["password-otps"] || mongoose.model("password-otps", otpSchemaPassword);

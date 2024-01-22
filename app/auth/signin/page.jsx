@@ -18,6 +18,8 @@ import { v2Theme } from '@/app/Mui/client.mjs';
 import PasswordMUI from '@/app/Mui/components/PasswordMUI';
 import AlertMUI from '@/app/Mui/components/AlertMUI';
 import { emailPattern, passwordPattern } from '@/app/core.mjs';
+import axios from "axios"
+import { useRouter } from 'next/navigation';
 
 function Copyright(props) {
   return (
@@ -38,13 +40,19 @@ export default function SignIn() {
 
   const [password, setPassword] = React.useState("")
   const [clientErrorMessage, setClientErrorMessage] = React.useState(null)
+  const [clientSuccessMessage, setClientSuccessMessage] = React.useState(null)
+  const [isLoading, setIsLoading] = React.useState(false)
 
-  const handleSubmit = (event) => {
+  const router = useRouter()
+
+  const handleSubmit = async (event) => {
 
     event.preventDefault();
     const data = new FormData(event.currentTarget);
 
     const email = data.get('email')
+
+    console.log(email, password);
 
     if (!emailPattern.test(email) || !passwordPattern.test(password)) {
       setClientErrorMessage("Email or Password incorrect")
@@ -54,12 +62,30 @@ export default function SignIn() {
       return
     }
 
-    const body = {
-      email: email,
-      password: password
-    }
+    try {
 
-    console.log(body);
+      setIsLoading(true)
+
+      const response = await axios.post("/api/v1/auth/signin", {
+        email: email,
+        password: password,
+      }, { withCredentials: true })
+
+      router.push("/")
+      setIsLoading(false)
+      setClientSuccessMessage(response.data.message)
+      setTimeout(() => {
+        setClientSuccessMessage(null)
+      }, 2000);
+
+    } catch (error) {
+      console.log(error);
+      setIsLoading(false)
+      setClientErrorMessage(error.response.data.message)
+      setTimeout(() => {
+        setClientErrorMessage(null)
+      }, 2000)
+    }
 
   };
 
@@ -67,6 +93,9 @@ export default function SignIn() {
     <ThemeProvider theme={v2Theme}>
       {
         clientErrorMessage && <AlertMUI status="error" text={clientErrorMessage} />
+      }
+      {
+        clientSuccessMessage && <AlertMUI status="success" text={clientSuccessMessage} />
       }
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -113,9 +142,17 @@ export default function SignIn() {
               type="submit"
               fullWidth
               variant="contained"
+              disabled={isLoading}
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              {
+                isLoading ?
+                  <>
+                    <span className="buttonLoader"></span>
+                    Processing
+                  </>
+                  : "Sign In"
+              }
             </Button>
             <Grid container>
               <Grid item xs style={{ marginRight: "16px" }}>

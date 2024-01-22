@@ -69,7 +69,7 @@ export const POST = async (req, res) => {
         console.log(error);
         return NextResponse.json({
             message: "error",
-        });
+        }, { status: 500 });
     }
 
 };

@@ -20,6 +20,7 @@ import { ArrowBackIos, ArrowForwardIos } from '@mui/icons-material';
 import { useRouter } from 'next/navigation';
 import { emailPattern } from '@/app/core.mjs';
 import AlertMUI from '@/app/Mui/components/AlertMUI';
+import axios from 'axios';
 
 function Copyright(props) {
     return (
@@ -40,8 +41,10 @@ export default function ForgotPassword() {
 
     const router = useRouter()
     const [clientErrorMessage, setClientErrorMessage] = React.useState(null)
+    const [clientSuccessMessage, setClientSuccessMessage] = React.useState(null)
+    const [isLoading, setIsLoading] = React.useState(false)
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
 
         event.preventDefault();
         const data = new FormData(event.currentTarget);
@@ -56,11 +59,29 @@ export default function ForgotPassword() {
             return;
         }
 
-        const body = {
-            email: email
-        }
+        try {
 
-        console.log(body);
+            setIsLoading(true)
+
+            const response = await axios.post(`/api/v1/auth/forgot-password`, {
+                email: email
+            }, { withCredentials: true })
+
+            setIsLoading(false)
+            router.push(`/auth/forgot-password-complete?email=${email}`)
+            setClientSuccessMessage(response.data.message)
+            setTimeout(() => {
+                setClientSuccessMessage(null)
+            }, 2000)
+
+        } catch (error) {
+            console.log(error);
+            setIsLoading(false)
+            setClientErrorMessage(error.response.data.message)
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+        }
 
     };
 
@@ -68,6 +89,9 @@ export default function ForgotPassword() {
         <ThemeProvider theme={v2Theme}>
             {
                 clientErrorMessage && <AlertMUI status="error" text={clientErrorMessage} />
+            }
+            {
+                clientSuccessMessage && <AlertMUI status="success" text={clientSuccessMessage} />
             }
             <Container component="main" maxWidth="xs">
                 <CssBaseline />
@@ -130,23 +154,40 @@ export default function ForgotPassword() {
                                 type="submit"
                                 fullWidth
                                 variant="contained"
-                                sx={{ mt: 3, mb: 2, width: "100px" }}
+                                sx={{ mt: 3, mb: 2, width: isLoading ? "150px" : "100px" }}
                                 style={{
                                     display: "flex",
                                     justifyContent: "flex-end",
                                     alignItems: "center",
                                 }}
+                                disabled={isLoading}
                             >
-                                <span style={{
-                                    width: "50%",
-                                    textAlign: "center",
-                                    paddingRight: "4px"
-                                }}
-                                >Next</span>
-                                <ArrowForwardIos style={{
-                                    fontSize: "16px",
-                                    marginRight: "4px"
-                                }} />
+                                {
+                                    isLoading ?
+                                        <>
+                                            <span style={{
+                                                width: "50%",
+                                                textAlign: "center",
+                                                paddingRight: "4px",
+                                                marginRight: "16px"
+                                            }}
+                                            >Processing</span>
+                                            <span className="buttonLoader"></span>
+                                        </>
+                                        :
+                                        <>
+                                            <span style={{
+                                                width: "50%",
+                                                textAlign: "center",
+                                                paddingRight: "4px"
+                                            }}
+                                            >Next</span>
+                                            <ArrowForwardIos style={{
+                                                fontSize: "16px",
+                                                marginRight: "4px"
+                                            }} />
+                                        </>
+                                }
                             </Button>
                         </Box>
                     </Box>

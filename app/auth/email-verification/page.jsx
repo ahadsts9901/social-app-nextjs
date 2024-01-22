@@ -19,6 +19,10 @@ import PasswordMUI from "@/app/Mui/components/PasswordMUI";
 import { ArrowBackIos, ArrowForwardIos } from "@mui/icons-material";
 import { useRouter } from "next/navigation";
 import { MuiOtpInput } from "mui-one-time-password-input";
+import axios from "axios"
+import AlertMUI from "@/app/Mui/components/AlertMUI";
+import { otpPattern } from "@/app/core.mjs";
+import { set } from "mongoose";
 
 function Copyright(props) {
   return (
@@ -48,33 +52,106 @@ export default function EmailVerification() {
 
   const [mail, setMail] = React.useState("");
   const [otp, setOtp] = React.useState("");
+  const [clientErrorMessage, setClientErrorMessage] = React.useState(null)
+  const [clientSuccessMessage, setClientSuccessMessage] = React.useState(null)
+  const [isLoading, setIsLoading] = React.useState(false)
 
   const router = useRouter()
 
   React.useEffect(() => {
     let email = location.href
-      .split("/")[4]
       .split("?")[1]
       .split("=")[1]
       .split("%40");
     if (email[1]) {
       email = `${email[0]}@${email[1]}`;
+      setMail(email);
     } else {
-      email = email;
+      email = email[0];
+      setMail(email);
     }
-    setMail(email);
   }, []);
 
-  const handleChange = (newValue) => {
+  const handleChange = async (newValue) => {
+
     setOtp(newValue);
 
     if (newValue.length === 6) {
-      console.log(newValue);
+
+      if (!otpPattern.test(newValue)) {
+        setClientErrorMessage("Invalid otp code")
+        setTimeout(() => {
+          setClientErrorMessage(null)
+        }, 2000)
+        return;
+      }
+
+      try {
+        setIsLoading(true)
+
+        const response = await axios.put(`/api/v1/auth/verify-email`, {
+          email: mail,
+          otpCode: newValue
+        }, { withCredentials: true })
+
+        router.push("/")
+        setClientSuccessMessage(response.data.message)
+        setTimeout(() => {
+          setClientSuccessMessage(null)
+        }, 2000)
+
+        setIsLoading(false)
+      } catch (error) {
+        console.log(error);
+        setIsLoading(false)
+        setClientErrorMessage(error.response.data.message)
+        setTimeout(() => {
+          setClientErrorMessage(null)
+        }, 2000)
+      }
+
     }
+
   };
+
+  const resendOtp = async (email) => {
+
+    try {
+
+      setIsLoading(true)
+
+      const response = await axios.post(`/api/v1/auth/email-otp`, {
+        email: email
+      }, { withCredentials: true })
+
+      setClientSuccessMessage(response.data.message)
+      setTimeout(() => {
+        setClientSuccessMessage(null)
+      }, [2000])
+
+      setIsLoading(false)
+
+    } catch (error) {
+      console.log("error", error);
+      setIsLoading(false)
+
+      setClientErrorMessage(error.response.data.message)
+      setTimeout(() => {
+        setClientErrorMessage(null)
+      }, [2000])
+    }
+
+  }
 
   return (
     <ThemeProvider theme={v2Theme}>
+      {
+        clientErrorMessage && <AlertMUI status="error" text={clientErrorMessage} />
+      }
+
+      {
+        clientSuccessMessage && <AlertMUI status="success" text={clientSuccessMessage} />
+      }
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -99,7 +176,7 @@ export default function EmailVerification() {
               marginTop: "16px",
             }}
           >
-            Enter 6 digit code sent to: {mail}
+            Enter 6 digit code sent to: <b>{mail}</b>
           </Typography>
           <Box noValidate sx={{ mt: 1, width: "100%" }}>
             <MuiOtpInput
@@ -121,7 +198,8 @@ export default function EmailVerification() {
               <Button
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2, width: "100px" }}
+                disabled={isLoading}
+                sx={{ mt: 3, mb: 2, width: isLoading ? "150px" : "100px" }}
                 style={{
                   display: "flex",
                   justifyContent: "flex-start",
@@ -129,21 +207,39 @@ export default function EmailVerification() {
                 }}
                 onClick={() => router.back()}
               >
-                <ArrowBackIos
-                  style={{
-                    fontSize: "16px",
-                    marginLeft: "4px",
-                  }}
-                />
-                <span
-                  style={{
-                    width: "50%",
-                    textAlign: "center",
-                    paddingLeft: "4px",
-                  }}
-                >
-                  Back
-                </span>
+                {
+                  isLoading ?
+                    <>
+                      <span className="buttonLoader"></span>
+                      <span
+                        style={{
+                          width: "50%",
+                          textAlign: "center",
+                          paddingLeft: "4px",
+                        }}
+                      >
+                        Processing
+                      </span>
+                    </>
+                    :
+                    <>
+                      <ArrowBackIos
+                        style={{
+                          fontSize: "16px",
+                          marginLeft: "4px",
+                        }}
+                      />
+                      <span
+                        style={{
+                          width: "50%",
+                          textAlign: "center",
+                          paddingLeft: "4px",
+                        }}
+                      >
+                        Back
+                      </span>
+                    </>
+                }
               </Button>
               <Typography
                 component="p"
@@ -153,6 +249,9 @@ export default function EmailVerification() {
                   textDecoration: "underline",
                   textDecorationColor: theme.palette.text.primary,
                   cursor: "pointer",
+                }}
+                onClick={() => {
+                  resendOtp(mail)
                 }}
               >
                 Resend OTP
