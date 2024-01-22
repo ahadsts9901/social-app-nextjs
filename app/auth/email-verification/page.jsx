@@ -45,8 +45,11 @@ function Copyright(props) {
 }
 
 export default function EmailVerification() {
+
   const [mail, setMail] = React.useState("");
   const [otp, setOtp] = React.useState("");
+
+  const router = useRouter()
 
   React.useEffect(() => {
     let email = location.href
@@ -61,8 +64,6 @@ export default function EmailVerification() {
     }
     setMail(email);
   }, []);
-
-  const router = useRouter()
 
   const handleChange = (newValue) => {
     setOtp(newValue);

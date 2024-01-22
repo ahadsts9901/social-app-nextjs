@@ -8,7 +8,7 @@ import moment from "moment";
 import otpGenerator from 'otp-generator'
 import "dotenv/config"
 
-export const POST = async (req, res) => {
+export const POST = async(req, res) => {
 
     const { email } = await req.json()
 
@@ -58,12 +58,12 @@ export const POST = async (req, res) => {
     // 4th otp: 24 hours delay.
 
     // if three otp created within 24hr
-    if (otp?.length >= 3) {
+    if (otp ? .length >= 3) {
         return NextResponse.json({
-            message: "OTP send limit exceed, try again in 24 hours",
-        }, { status: 400 })
-        // if two otp created within 24hr
-    } else if (otp?.length === 2) {
+                message: "OTP send limit exceed, try again in 24 hours",
+            }, { status: 400 })
+            // if two otp created within 24hr
+    } else if (otp ? .length === 2) {
         // it should be older than 60 minutes
         if (moment().diff(moment(otp[0].createdOn), 'minutes') <= 60) {
             return NextResponse.json({
@@ -71,7 +71,7 @@ export const POST = async (req, res) => {
             }, { status: 400 })
         }
         // if only one otp created within 24hr
-    } else if (otp?.length === 1) {
+    } else if (otp ? .length === 1) {
         // it should be older than 5 minutes
         if (moment().diff(moment(otp[0].createdOn), 'minutes') <= 5) {
             return NextResponse.json({
@@ -82,7 +82,7 @@ export const POST = async (req, res) => {
 
     // generate otp code
     const otpCode = otpGenerator.generate(6, {
-        upperCaseAlphabets: true,
+        upperCaseAlphabets: false,
         lowerCaseAlphabets: true,
         specialChars: false
     });
