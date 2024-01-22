@@ -8,9 +8,9 @@ import { createTheme } from '@mui/material/styles';
 export const theme = {
     palette: {
         primary: {
-            light: '#4D7E99',
-            main: '#447088',
-            dark: '#3C6277',
+            light: '#3F5873',
+            main: '#364B63',
+            dark: '#2D3F52',
             contrastText: '#EEF4F6',
         },
         secondary: {
@@ -51,7 +51,7 @@ export const theme = {
         },
         text: {
             primary: '#0F1924',
-            secondary: '#172636',
+            secondary: '#6B7E93',
         },
         background: {
             default: '#F8FAFC',
