@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import axios from 'axios'
-import { login } from "./user"
+import { login, logout } from "./user"
 
 const UserWrapper = ({ children }) => {
 
@@ -15,6 +15,7 @@ const UserWrapper = ({ children }) => {
                 dispatch(login(response.data.data))
             } catch (error) {
                 console.error(error);
+                dispatch(logout(null))
             }
         };
 

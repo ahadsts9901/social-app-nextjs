@@ -26,6 +26,7 @@ import AdminPanelSettingsRoundedIcon from '@mui/icons-material/AdminPanelSetting
 import { useRouter } from 'next/navigation';
 import { useDispatch, useSelector } from 'react-redux';
 import { profilePicture } from '@/app/api/schema.mjs';
+import Image from 'next/image';
 
 const drawerWidth = 240;
 
@@ -129,12 +130,14 @@ export default function MiniDrawer() {
                     >
                         <MenuIcon />
                     </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        We App
-                    </Typography>
-                    <ListItemButton className="flex flex-row-reverse gap-[1em] items-center ml-[auto]">
-                        <img onClick={() => router.push("/profile")} src={currentUser.profilePhoto || profilePicture} alt="profile picture" className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
-                        <Typography>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</Typography>
+                    <ListItemButton>
+                        <ListItemText className='h-[33px] flex items-center m-0'>We App</ListItemText>
+                    </ListItemButton>
+                    <ListItemButton onClick={() => router.push("/profile")} className="flex flex-row-reverse gap-[1em] items-center ml-[auto]">
+                        <ListItemIcon>
+                            <Image src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
+                        </ListItemIcon>
+                        <ListItemText className='text-right'>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</ListItemText>
                     </ListItemButton>
                 </Toolbar>
             </AppBar>
