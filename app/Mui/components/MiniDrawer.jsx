@@ -24,6 +24,8 @@ import ControlPointDuplicateRoundedIcon from '@mui/icons-material/ControlPointDu
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import AdminPanelSettingsRoundedIcon from '@mui/icons-material/AdminPanelSettingsRounded';
 import { useRouter } from 'next/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import { profilePicture } from '@/app/api/schema.mjs';
 
 const drawerWidth = 240;
 
@@ -93,6 +95,11 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function MiniDrawer() {
+
+    const currentUser = useSelector(state => state.user)
+
+    const dispatch = useDispatch()
+
     const router = useRouter();
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -125,7 +132,10 @@ export default function MiniDrawer() {
                     <Typography variant="h6" noWrap component="div">
                         We App
                     </Typography>
-                    <img onClick={() => router.push("/profile")} src="https://res.cloudinary.com/dcvxjvvhu/image/upload/v1706001134/profile-picture_ea7eaq.png" alt="profile picture" className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%] ml-[auto]' />
+                    <Box className="flex gap-[1em] items-center ml-[auto]">
+                        <Typography>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</Typography>
+                        <img onClick={() => router.push("/profile")} src={currentUser.profilePhoto || profilePicture} alt="profile picture" className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
+                    </Box>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
@@ -165,8 +175,8 @@ export default function MiniDrawer() {
                         href: '/admin',
                         icon: <AdminPanelSettingsRoundedIcon />,
                     },
-                    ].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+                    ].map(({ text, href, icon }, index) => (
+                        <ListItem key={index} disablePadding sx={{ display: 'block' }}>
                             <ListItemButton
                                 sx={{
                                     minHeight: 48,
@@ -176,7 +186,7 @@ export default function MiniDrawer() {
                                     color: "#666"
                                 }}
                                 onClick={() => {
-                                    router.push(text.href);
+                                    router.push(href);
                                 }}
                             >
                                 <ListItemIcon
@@ -186,9 +196,9 @@ export default function MiniDrawer() {
                                         justifyContent: 'center',
                                     }}
                                 >
-                                    {text.icon}
+                                    {icon}
                                 </ListItemIcon>
-                                <ListItemText primary={text.text} sx={{ opacity: open ? 1 : 0 }} />
+                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
                             </ListItemButton>
                         </ListItem>
                     ))}

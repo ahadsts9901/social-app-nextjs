@@ -56,7 +56,6 @@ export const POST = async (req, res) => {
             lastName: lastName,
             email: email,
             password: passwordHash,
-            profilePhoto: null,
             provider: "google",
             isEmailVerified: false,
         });

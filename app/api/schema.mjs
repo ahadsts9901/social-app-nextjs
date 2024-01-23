@@ -10,12 +10,13 @@ export const otpMaxAgeInMinutes = 15;
 export const forgetPasswordOtpMaxAgeInMinutes = 15;
 export const initialSessionInDays = 15;
 export const extendedSessionInDays = 30;
+export const profilePicture = "https://res.cloudinary.com/dcvxjvvhu/image/upload/v1706001134/profile-picture_ea7eaq.png"
 
 // user schema
 let userSchema = new mongoose.Schema({
     profilePhoto: {
         type: String,
-        default: null,
+        default: profilePicture,
         maxlength: 1000,
         match: profilePicturePattern
     },
@@ -80,7 +81,7 @@ userSchema.pre('save', function (next) {
     next();
 });
 
-export const userModel = mongoose.models.users || mongoose.model('users', userSchema)
+export const userModel = mongoose.model('users', userSchema) || mongoose.models.users
 
 // email otp schema
 let otpSchemaEmail = new mongoose.Schema({
@@ -114,7 +115,7 @@ otpSchemaEmail.pre('save', function (next) {
     next();
 });
 
-export const otpModelEmail = mongoose.models["email-otps"] || mongoose.model("email-otps", otpSchemaEmail);
+export const otpModelEmail = mongoose.model("email-otps", otpSchemaEmail) || mongoose.models["email-otps"]
 
 //  otp schema
 let otpSchemaPassword = new mongoose.Schema({
@@ -148,4 +149,4 @@ otpSchemaPassword.pre('save', function (next) {
     next();
 });
 
-export const otpModelPassword = mongoose.models["password-otps"] || mongoose.model("password-otps", otpSchemaPassword);
+export const otpModelPassword = mongoose.model("password-otps", otpSchemaPassword) || mongoose.models["password-otps"]
