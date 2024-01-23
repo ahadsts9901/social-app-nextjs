@@ -81,7 +81,15 @@ userSchema.pre('save', function (next) {
     next();
 });
 
-export const userModel = mongoose.model('users', userSchema) || mongoose.models.users
+let userModel;
+
+try {
+    userModel = mongoose.model('users');
+} catch (error) {
+    userModel = mongoose.model('users', userSchema);
+}
+
+export { userModel };
 
 // email otp schema
 let otpSchemaEmail = new mongoose.Schema({
@@ -115,7 +123,15 @@ otpSchemaEmail.pre('save', function (next) {
     next();
 });
 
-export const otpModelEmail = mongoose.model("email-otps", otpSchemaEmail) || mongoose.models["email-otps"]
+let otpModelEmail;
+
+try {
+    otpModelEmail = mongoose.model('email-otps');
+} catch (error) {
+    otpModelEmail = mongoose.model('email-otps', otpSchemaEmail);
+}
+
+export { otpModelEmail };
 
 //  otp schema
 let otpSchemaPassword = new mongoose.Schema({
@@ -149,4 +165,12 @@ otpSchemaPassword.pre('save', function (next) {
     next();
 });
 
-export const otpModelPassword = mongoose.model("password-otps", otpSchemaPassword) || mongoose.models["password-otps"]
+let otpModelPassword
+
+try {
+    otpModelPassword = mongoose.model('password-otps');
+} catch (error) {
+    otpModelPassword = mongoose.model('password-otps', otpSchemaPassword);
+}
+
+export { otpModelPassword };

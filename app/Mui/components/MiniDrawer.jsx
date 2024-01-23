@@ -132,10 +132,10 @@ export default function MiniDrawer() {
                     <Typography variant="h6" noWrap component="div">
                         We App
                     </Typography>
-                    <Box className="flex gap-[1em] items-center ml-[auto]">
-                        <Typography>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</Typography>
+                    <ListItemButton className="flex flex-row-reverse gap-[1em] items-center ml-[auto]">
                         <img onClick={() => router.push("/profile")} src={currentUser.profilePhoto || profilePicture} alt="profile picture" className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
-                    </Box>
+                        <Typography>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</Typography>
+                    </ListItemButton>
                 </Toolbar>
             </AppBar>
             <Drawer variant="permanent" open={open}>
