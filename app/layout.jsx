@@ -1,3 +1,4 @@
+import { Providers } from './redux/StoreProvider';
 import './globals.css';
 import { AppRouterCacheProvider } from '@mui/material-nextjs/v13-appRouter';
 
@@ -16,7 +17,11 @@ export default function RootLayout({ children }) {
         <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@100..900&family=Roboto+Condensed:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
       </head>
       <body>
-        <AppRouterCacheProvider>{children}</AppRouterCacheProvider>
+        <Providers>
+          <AppRouterCacheProvider>
+            {children}
+          </AppRouterCacheProvider>
+        </Providers>
       </body>
     </html>
   );

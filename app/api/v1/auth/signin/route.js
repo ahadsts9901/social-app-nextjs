@@ -70,7 +70,15 @@ export const POST = async (req, res) => {
         });
 
         const response = NextResponse.json({
-            message: "Signin successfull"
+            message: "Signin successfull",
+            data: {
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                isAdmin: user.isAdmin,
+                profilePhoto: user.profilePhoto,
+                _id: user._id,
+            }
         });
 
         response.cookies.set('hartRef', hartRef, {

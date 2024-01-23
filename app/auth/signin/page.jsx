@@ -20,6 +20,8 @@ import AlertMUI from '@/app/Mui/components/AlertMUI';
 import { emailPattern, passwordPattern } from '@/app/core.mjs';
 import axios from "axios"
 import { useRouter } from 'next/navigation';
+import { useDispatch } from "react-redux"
+import { login } from "../../redux/user"
 
 function Copyright(props) {
   return (
@@ -44,6 +46,7 @@ export default function SignIn() {
   const [isLoading, setIsLoading] = React.useState(false)
 
   const router = useRouter()
+  const dispatch = useDispatch()
 
   const handleSubmit = async (event) => {
 
@@ -51,8 +54,6 @@ export default function SignIn() {
     const data = new FormData(event.currentTarget);
 
     const email = data.get('email')
-
-    console.log(email, password);
 
     if (!emailPattern.test(email) || !passwordPattern.test(password)) {
       setClientErrorMessage("Email or Password incorrect")
@@ -71,11 +72,12 @@ export default function SignIn() {
         password: password,
       }, { withCredentials: true })
 
-      router.push("/")
       setIsLoading(false)
       setClientSuccessMessage(response.data.message)
+      dispatch(login(response.data.data))
       setTimeout(() => {
         setClientSuccessMessage(null)
+        router.push("/")
       }, 2000);
 
     } catch (error) {
