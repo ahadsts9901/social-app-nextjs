@@ -12,7 +12,8 @@ html {
   box-sizing: border-box;
 }
 
-body {
+body,
+body>.mui-k008qs {
   height: 100%;
   box-sizing: border-box;
 }
@@ -55,4 +56,12 @@ body {
   100% {
     transform: rotate(360deg);
   }
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.hide-scrollbar::-moz-scrollbar {
+  display: none;
 }

@@ -31,5 +31,12 @@ export const config = {
         '/auth/forgot-password',
         '/auth/forgot-password-complete',
         '/auth/email-verification',
+        '/profile',
+        '/profile/:username',
+        '/updates',
+        '/chat',
+        '/create',
+        '/search',
+        '/admin',
     ],
 }

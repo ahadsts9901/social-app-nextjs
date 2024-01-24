@@ -1,3 +1,5 @@
+import "../../globals.css"
+import "./index.css"
 import * as React from 'react';
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
@@ -97,11 +99,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MiniDrawer({ children }) {
 
-    const [pathname, setPathname] = React.useState(location.pathname)
+    const currentLocation = location?.pathname
+    const [pathname, setPathname] = React.useState(location)
 
     React.useEffect(() => {
-        setPathname(location.pathname)
-    }, [location.pathname])
+        setPathname(currentLocation)
+    }, [currentLocation])
 
     const currentUser = useSelector(state => state.user)
 
@@ -137,13 +140,13 @@ export default function MiniDrawer({ children }) {
                         <MenuIcon />
                     </IconButton>
                     <ListItemButton>
-                        <ListItemText className='h-[33px] flex items-center m-0'>We App</ListItemText>
+                        <ListItemText className='h-[33px] w-[5em] flex items-center m-0'>We App</ListItemText>
                     </ListItemButton>
                     <ListItemButton onClick={() => router.push("/profile")} className="flex flex-row-reverse gap-[1em] items-center ml-[auto]">
                         <ListItemIcon>
                             <Image src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
                         </ListItemIcon>
-                        <ListItemText className='text-right'>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</ListItemText>
+                        <ListItemText className='name text-right w-[10em] no-scrollbar'>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</ListItemText>
                     </ListItemButton>
                 </Toolbar>
             </AppBar>

@@ -1,0 +1,57 @@
+button[button="small"] {
+    display: none;
+}
+
+@media (max-width: 750px) {
+    .createCont {
+        flex-direction: column !important;
+    }
+
+    button[button="desktop"] {
+        display: none;
+    }
+
+    button[button="small"] {
+        display: block;
+    }
+
+    .contentCont {
+        height: 30% !important;
+        flex-direction: row;
+    }
+
+    .labelFile {
+        margin-left: auto;
+        margin-top: auto;
+    }
+
+    .createVideo {
+        height: 100% !important;
+    }
+
+    .createPhoto {
+        height: 100% !important;
+    }
+
+}
+
+
+@media (max-width: 420px) {
+    .createCont {
+        flex-direction: column !important;
+    }
+
+    .contentCont {
+        flex-direction: column;
+    }
+
+    .labelFile {
+        margin-left: auto;
+        margin-top: auto;
+    }
+
+    .imgVidCont{
+        height: 70%!important;
+    }
+
+}
