@@ -95,7 +95,13 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
     }),
 );
 
-export default function MiniDrawer() {
+export default function MiniDrawer({ children }) {
+
+    const [pathname, setPathname] = React.useState(location.pathname)
+
+    React.useEffect(() => {
+        setPathname(location.pathname)
+    }, [location.pathname])
 
     const currentUser = useSelector(state => state.user)
 
@@ -186,7 +192,8 @@ export default function MiniDrawer() {
                                     justifyContent: open ? 'initial' : 'center',
                                     px: 2.5,
                                     py: 2,
-                                    color: "#666"
+                                    color: pathname === href ? "#2D3F52" : "#666",
+                                    fontWeight: pathname === href ? "bold" : "normal",
                                 }}
                                 onClick={() => {
                                     router.push(href);
@@ -197,6 +204,7 @@ export default function MiniDrawer() {
                                         minWidth: 0,
                                         mr: open ? 3 : 'auto',
                                         justifyContent: 'center',
+                                        color: pathname === href ? "#2D3F52" : "#666"
                                     }}
                                 >
                                     {icon}
@@ -209,7 +217,7 @@ export default function MiniDrawer() {
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
-
+                {children}
             </Box>
         </Box>
     );
