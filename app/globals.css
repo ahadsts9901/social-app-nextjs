@@ -7,6 +7,16 @@
   font-family: "League Spartan", sans-serif;
 }
 
+html {
+  height: 100vh;
+  box-sizing: border-box;
+}
+
+body {
+  height: 100%;
+  box-sizing: border-box;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
 }
@@ -26,8 +36,8 @@ body {
 }
 
 .buttonLoader {
-  width:18px;
-  height:18px;
+  width: 18px;
+  height: 18px;
   border: 2px solid;
   border-bottom-color: transparent;
   border-radius: 50%;

@@ -167,11 +167,13 @@ export default function MiniDrawer({ children }) {
                         text: 'Chat',
                         href: '/chat',
                         icon: <ForumRoundedIcon />,
-                    }, {
-                        text: 'Games',
-                        href: '/games',
-                        icon: <SportsEsportsRoundedIcon />,
-                    }, {
+                    }, 
+                    // {
+                    //     text: 'Games',
+                    //     href: '/games',
+                    //     icon: <SportsEsportsRoundedIcon />,
+                    // },
+                     {
                         text: 'Create',
                         href: '/create',
                         icon: <ControlPointDuplicateRoundedIcon />,
