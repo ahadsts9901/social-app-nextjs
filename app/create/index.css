@@ -12,7 +12,10 @@ button[button="small"] {
     }
 
     button[button="small"] {
-        display: block;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
     }
 
     .contentCont {

@@ -1,5 +1,6 @@
 "use client"
 
+import "../globals.css"
 import "./index.css"
 import React, { useEffect, useRef, useState } from 'react'
 import MiniDrawer from '../Mui/components/MiniDrawer'
@@ -49,7 +50,7 @@ const Create = () => {
             return;
         }
 
-        if (text.trim().length > 1000) {
+        if (text?.trim().length > 1000) {
             setClientErrorMessage("Text must be less than 1000 characters")
             setTimeout(() => {
                 setClientErrorMessage(null)
@@ -64,11 +65,13 @@ const Create = () => {
         try {
 
             setIsLoading(true)
+            setIsButtonDisabled(true)
 
             const response = await axios.post("/api/v1/post", formData,
                 { withCredentials: true })
 
             setIsLoading(false)
+            setIsButtonDisabled(false)
 
             setClientSuccessMessage(response.data.message)
             setTimeout(() => {
@@ -78,6 +81,7 @@ const Create = () => {
         } catch (error) {
             console.log(error);
             setIsLoading(false)
+            setIsButtonDisabled(false)
             setClientErrorMessage(error.response.data.message)
         }
 
@@ -99,7 +103,14 @@ const Create = () => {
                                 setText(e.target.value)
                             }}
                         ></textarea>
-                        <Button onClick={submitHandler} disabled={isButtonDisabled} color="primary" variant="contained" className="w-32" button="desktop">Post</Button>
+                        <Button onClick={submitHandler} disabled={isButtonDisabled} color="primary" variant="contained" className={`${isLoading ? "w-40" : "w-32"} flex justify-center items-center gap-8`} button="desktop">
+                            {
+                                isLoading ? <>
+                                    <span className="buttonLoader"></span>
+                                    Processing
+                                </> : "Post"
+                            }
+                        </Button>
                     </div>
                     {
                         (selectedImage || selectedVideo) &&
@@ -138,7 +149,14 @@ const Create = () => {
                             </label>
                         </>
                     }
-                    <Button onClick={submitHandler} disabled={isButtonDisabled} variant="contained" color="primary" className="w-32" button="small">Post</Button>
+                    <Button onClick={submitHandler} disabled={isButtonDisabled} variant="contained" color="primary" className={isLoading ? "w-36" : "w-32"} button="small">
+                        {
+                            isLoading ? <>
+                                <span className="buttonLoader"></span>
+                                Processing
+                            </> : "Post"
+                        }
+                    </Button>
                     <input ref={fileRef} type="file" id="file" accept="image/*,video/*" hidden onChange={(e) => {
                         const file = e.target.files[0]
                         if (file) {
