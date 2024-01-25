@@ -174,3 +174,70 @@ try {
 }
 
 export { otpModelPassword };
+
+// like schema
+let likeSchema = new mongoose.Schema({
+    id: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
+    image: {
+        type: String,
+        match: profilePicturePattern,
+        required: true,
+    },
+    firstName: {
+        type: String,
+        required: true,
+    },
+    lastName: {
+        type: String,
+        required: true,
+    }
+})
+
+// post schema
+let postSchema = new mongoose.Schema({
+    authorImage: {
+        type: String,
+        default: profilePicture,
+        maxlength: 1000,
+        match: profilePicturePattern
+    },
+    authorName: {
+        type: String,
+        required: true,
+        minlength: 2,
+        maxlength: 30,
+        trim: true,
+    },
+    text: {
+        type: String,
+    },
+    media: {
+        type: String,
+        match: profilePicturePattern
+    },
+    mediaType: {
+        type: String,
+        enum: ['image', 'video', null],
+    },
+    likes: {
+        type: [likeSchema],
+        default: []
+    },
+    createdOn: {
+        type: Date,
+        default: Date.now
+    }
+});
+
+let postModel;
+
+try {
+    postModel = mongoose.model('posts');
+} catch (error) {
+    postModel = mongoose.model('posts', postSchema);
+}
+
+export { postModel };

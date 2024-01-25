@@ -67,8 +67,10 @@ const Create = () => {
             setIsLoading(true)
             setIsButtonDisabled(true)
 
-            const response = await axios.post("/api/v1/post", formData,
-                { withCredentials: true })
+            const response = await axios.post("/api/v1/post", formData, {
+                headers: { "Content-Type": "multipart/form-data" },
+                withCredentials: true,
+            })
 
             setIsLoading(false)
             setIsButtonDisabled(false)
@@ -83,6 +85,9 @@ const Create = () => {
             setIsLoading(false)
             setIsButtonDisabled(false)
             setClientErrorMessage(error.response.data.message)
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
         }
 
     }
@@ -123,7 +128,7 @@ const Create = () => {
                                     }}
                                 />
                                 {
-                                    selectedImage && <img priority crossOrigin="anonymous" src={selectedImage} className='createPhoto h-[100%] object-cover object-center self-start rounded-[12px]' />
+                                    selectedImage && <img priority="true" crossOrigin="anonymous" src={selectedImage} className='createPhoto h-[100%] object-cover object-center self-start rounded-[12px]' />
                                 }
                                 {
                                     selectedVideo && <video src={selectedVideo} autoPlay muted controls loop className='createVideo h-[100%] bg-black rounded-[12px]' />

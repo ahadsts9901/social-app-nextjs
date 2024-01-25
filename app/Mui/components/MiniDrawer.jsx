@@ -144,7 +144,7 @@ export default function MiniDrawer({ children }) {
                     </ListItemButton>
                     <ListItemButton onClick={() => router.push("/profile")} className="flex flex-row-reverse gap-[1em] items-center ml-[auto]">
                         <ListItemIcon>
-                            <Image priority crossOrigin="anonymous" src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
+                            <Image priority="true" crossOrigin="anonymous" src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
                         </ListItemIcon>
                         <ListItemText className='name text-right w-[10em] no-scrollbar'>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</ListItemText>
                     </ListItemButton>
