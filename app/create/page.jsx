@@ -9,6 +9,8 @@ import Image from "next/image"
 import { Button } from '@mui/material'
 import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
+import AlertMUI from "../Mui/components/AlertMUI"
+import axios from "axios"
 
 const Create = () => {
 
@@ -16,6 +18,11 @@ const Create = () => {
     const [selectedVideo, setSelectedVideo] = useState(null)
     const [text, setText] = useState(null)
     const [isButtonDisabled, setIsButtonDisabled] = useState(true)
+    const [clientErrorMessage, setClientErrorMessage] = React.useState(null)
+    const [clientSuccessMessage, setClientSuccessMessage] = React.useState(null)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const fileRef = useRef()
 
     useEffect(() => {
 
@@ -29,8 +36,61 @@ const Create = () => {
 
     }, [text, selectedVideo, selectedImage])
 
+    const submitHandler = async (e) => {
+        e.preventDefault()
+
+        const file = fileRef.current.files[0]
+
+        if (!text && !file) {
+            setClientErrorMessage("Please enter text or select a file")
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+            return;
+        }
+
+        if (text.trim().length > 1000) {
+            setClientErrorMessage("Text must be less than 1000 characters")
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+            return;
+        }
+
+        const formData = new FormData()
+        formData.append("text", text)
+        formData.append("file", file)
+
+        try {
+
+            setIsLoading(true)
+
+            const response = await axios.post("/api/v1/post", formData,
+                { withCredentials: true })
+
+            setIsLoading(false)
+
+            setClientSuccessMessage(response.data.message)
+            setTimeout(() => {
+                setClientSuccessMessage(null)
+            }, 2000)
+
+        } catch (error) {
+            console.log(error);
+            setIsLoading(false)
+            setClientErrorMessage(error.response.data.message)
+        }
+
+    }
+
     return (
         <ThemeProvider theme={v2Theme}>
+            {
+                clientErrorMessage && <AlertMUI status="error" text={clientErrorMessage} />
+            }
+            {
+                clientSuccessMessage && <AlertMUI status="success" text={clientSuccessMessage} />
+            }
             <MiniDrawer>
                 <div className='w-[100%] h-[90%] flex createCont gap-8'>
                     <div className="h-[100%] flex-1 flex flex-col gap-8">
@@ -39,24 +99,24 @@ const Create = () => {
                                 setText(e.target.value)
                             }}
                         ></textarea>
-                        <Button disabled={isButtonDisabled} color="primary" variant="contained" className="w-32" button="desktop">Post</Button>
+                        <Button onClick={submitHandler} disabled={isButtonDisabled} color="primary" variant="contained" className="w-32" button="desktop">Post</Button>
                     </div>
                     {
                         (selectedImage || selectedVideo) &&
                         <div className='contentCont flex flex-col justify-between items-start flex-1 gap-2 h-[100%] rounded-3xl border-2 border-dashed p-4' >
                             <div className="h-[80%] imgVidCont relative">
-                            <CancelRoundedIcon className='text-[#353535] z-40 bg-white rounded-full absolute top-0 left-0 cursor-pointer m-2 opacity-[0.8]'
-                            onClick={() => {
-                                setSelectedImage(null)
-                                setSelectedVideo(null)
-                            }}
-                            />
-                            {
-                                selectedImage && <img src={selectedImage} className='createPhoto h-[100%] object-cover object-center self-start rounded-[12px]' />
-                            }
-                            {
-                                selectedVideo && <video src={selectedVideo} autoplay muted controls loop className='createVideo h-[100%] bg-black rounded-[12px]' />
-                            }
+                                <CancelRoundedIcon className='text-[#353535] z-40 bg-white rounded-full absolute top-0 left-0 cursor-pointer m-2 opacity-[0.8]'
+                                    onClick={() => {
+                                        setSelectedImage(null)
+                                        setSelectedVideo(null)
+                                    }}
+                                />
+                                {
+                                    selectedImage && <img priority crossOrigin="anonymous" src={selectedImage} className='createPhoto h-[100%] object-cover object-center self-start rounded-[12px]' />
+                                }
+                                {
+                                    selectedVideo && <video src={selectedVideo} autoPlay muted controls loop className='createVideo h-[100%] bg-black rounded-[12px]' />
+                                }
                             </div>
                             <label htmlFor="file" className='labelFile cursor-pointer'>
                                 <FileUploadRoundedIcon className='text-[#dadada]' style={{
@@ -78,8 +138,8 @@ const Create = () => {
                             </label>
                         </>
                     }
-                    <Button disabled={isButtonDisabled} variant="contained" color="primary" className="w-32" button="small">Post</Button>
-                    <input type="file" id="file" accept="image/*,video/*" hidden onChange={(e) => {
+                    <Button onClick={submitHandler} disabled={isButtonDisabled} variant="contained" color="primary" className="w-32" button="small">Post</Button>
+                    <input ref={fileRef} type="file" id="file" accept="image/*,video/*" hidden onChange={(e) => {
                         const file = e.target.files[0]
                         if (file) {
                             if (file.type.startsWith('image/')) {

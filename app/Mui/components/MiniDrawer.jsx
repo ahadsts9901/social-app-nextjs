@@ -99,12 +99,12 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MiniDrawer({ children }) {
 
-    const currentLocation = location?.pathname
-    const [pathname, setPathname] = React.useState(location)
+
+    const [pathname, setPathname] = React.useState(null)
 
     React.useEffect(() => {
-        setPathname(currentLocation)
-    }, [currentLocation])
+        setPathname(location.pathname)
+    }, [])
 
     const currentUser = useSelector(state => state.user)
 
@@ -144,7 +144,7 @@ export default function MiniDrawer({ children }) {
                     </ListItemButton>
                     <ListItemButton onClick={() => router.push("/profile")} className="flex flex-row-reverse gap-[1em] items-center ml-[auto]">
                         <ListItemIcon>
-                            <Image src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
+                            <Image priority crossOrigin="anonymous" src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
                         </ListItemIcon>
                         <ListItemText className='name text-right w-[10em] no-scrollbar'>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</ListItemText>
                     </ListItemButton>
@@ -170,13 +170,13 @@ export default function MiniDrawer({ children }) {
                         text: 'Chat',
                         href: '/chat',
                         icon: <ForumRoundedIcon />,
-                    }, 
+                    },
                     // {
                     //     text: 'Games',
                     //     href: '/games',
                     //     icon: <SportsEsportsRoundedIcon />,
                     // },
-                     {
+                    {
                         text: 'Create',
                         href: '/create',
                         icon: <ControlPointDuplicateRoundedIcon />,
