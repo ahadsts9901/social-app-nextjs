@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 export const emailPattern = /^[a-zA-Z0-9!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
 export const passwordPattern = /^(?=.*[a-zA-Z])(?=.*\d)(?!.*\s{2})[a-zA-Z\d!@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{8,24}$/;
 export const otpPattern = /^[a-z0-9]{6}$/
-export const profilePicturePattern = /^https:\/\/[^\s\/$.?#].[^\s]*$/;
+export const profilePicturePattern = /^https:\/\/res\.cloudinary\.com\/[a-zA-Z0-9_-]+\/[a-zA-Z0-9_-]+\/v[0-9]+\/[a-zA-Z0-9_-]+\..+$/i;
 export const firstNamePattern = /^[a-zA-Z0-9 !@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{2,15}$/;
 export const lastNamePattern = /^[a-zA-Z0-9 !@#$%^&*()_+{}\[\]:;<>,.?~\\/-]{2,15}$/;
 export const otpMaxAgeInMinutes = 15;
@@ -18,7 +18,6 @@ let userSchema = new mongoose.Schema({
         type: String,
         default: profilePicture,
         maxlength: 1000,
-        match: profilePicturePattern
     },
     firstName: {
         type: String,
@@ -183,7 +182,6 @@ let likeSchema = new mongoose.Schema({
     },
     image: {
         type: String,
-        match: profilePicturePattern,
         required: true,
     },
     firstName: {
@@ -200,9 +198,7 @@ let likeSchema = new mongoose.Schema({
 let postSchema = new mongoose.Schema({
     authorImage: {
         type: String,
-        default: profilePicture,
         maxlength: 1000,
-        match: profilePicturePattern
     },
     authorName: {
         type: String,
@@ -211,12 +207,15 @@ let postSchema = new mongoose.Schema({
         maxlength: 30,
         trim: true,
     },
+    authorId: {
+        type: mongoose.Schema.Types.ObjectId,
+        required: true,
+    },
     text: {
         type: String,
     },
     media: {
         type: String,
-        match: profilePicturePattern
     },
     mediaType: {
         type: String,

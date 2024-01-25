@@ -20,7 +20,7 @@ export const uploadOnCloudinary = (file, folder) => {
                 return null
             }
 
-            const buffer = await file.arrayBuffer()
+            const buffer = await file?.arrayBuffer()
             const bytes = Buffer.from(buffer)
 
             // upload file

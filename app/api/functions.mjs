@@ -1,5 +1,6 @@
 import nodemailer from "nodemailer"
 import "dotenv/config"
+import jwt from "jsonwebtoken"
 
 export const sendEmail = (email, firstName, subject, html) => {
 
@@ -34,4 +35,22 @@ export const sendEmail = (email, firstName, subject, html) => {
         }
 
     })
+}
+
+export const getUserData = (request) => {
+
+    return new Promise((resolve, reject) => {
+
+        const hart = request.cookies.get("hart")?.value || '';
+
+        if (!hart) {
+            reject(new Error("unauthorized"))
+        }
+
+        const userData = jwt.verify(hart, process.env.JWT_SECRET);
+
+        resolve(userData)
+
+    })
+
 }

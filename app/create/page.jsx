@@ -24,6 +24,7 @@ const Create = () => {
     const [isLoading, setIsLoading] = useState(false)
 
     const fileRef = useRef()
+    const textRef = useRef()
 
     useEffect(() => {
 
@@ -50,7 +51,31 @@ const Create = () => {
             return;
         }
 
-        if (text?.trim().length > 1000) {
+        if (file && file.size > 2000000 && file.type.startsWith("image")) {
+            setClientErrorMessage("Image too large, maximum limit is 2MB")
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+            return;
+        }
+
+        if (file && file.size > 10000000 && file.type.startsWith("video")) {
+            setClientErrorMessage("Video too large, maximum limit is 10MB")
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+            return;
+        }
+
+        if (text && text?.trim().length < 1) {
+            setClientErrorMessage("Text too short")
+            setTimeout(() => {
+                setClientErrorMessage(null)
+            }, 2000)
+            return;
+        }
+
+        if (text && text?.trim().length > 1000) {
             setClientErrorMessage("Text must be less than 1000 characters")
             setTimeout(() => {
                 setClientErrorMessage(null)
@@ -76,6 +101,11 @@ const Create = () => {
             setIsButtonDisabled(false)
 
             setClientSuccessMessage(response.data.message)
+            setSelectedImage(null)
+            setSelectedVideo(null)
+            setText(null)
+            textRef.current.value = ""
+            fileRef.current.value = ""
             setTimeout(() => {
                 setClientSuccessMessage(null)
             }, 2000)
@@ -103,7 +133,7 @@ const Create = () => {
             <MiniDrawer>
                 <div className='w-[100%] h-[90%] flex createCont gap-8'>
                     <div className="h-[100%] flex-1 flex flex-col gap-8">
-                        <textarea placeholder={(selectedImage || selectedVideo) ? "Add a caption" : "Share a thought....!!"} className='resize-none outline-none bg-inherit h-[100%] hide-scrollbar'
+                        <textarea ref={textRef} placeholder={(selectedImage || selectedVideo) ? "Add a caption" : "Share a thought....!!"} className='resize-none outline-none bg-inherit h-[100%] hide-scrollbar'
                             onChange={(e) => {
                                 setText(e.target.value)
                             }}
@@ -131,7 +161,7 @@ const Create = () => {
                                     selectedImage && <img priority="true" crossOrigin="anonymous" src={selectedImage} className='createPhoto h-[100%] object-cover object-center self-start rounded-[12px]' />
                                 }
                                 {
-                                    selectedVideo && <video src={selectedVideo} autoPlay muted controls loop className='createVideo h-[100%] bg-black rounded-[12px]' />
+                                    selectedVideo && <video src={selectedVideo} muted controls loop className='createVideo h-[100%] bg-black rounded-[12px]' />
                                 }
                             </div>
                             <label htmlFor="file" className='labelFile cursor-pointer'>
