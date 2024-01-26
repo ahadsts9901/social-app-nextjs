@@ -18,6 +18,10 @@ body>.mui-k008qs {
   box-sizing: border-box;
 }
 
+body{
+  overflow-x: hidden;
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
 }

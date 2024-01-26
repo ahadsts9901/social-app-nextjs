@@ -101,6 +101,7 @@ export default function MiniDrawer({ children }) {
 
 
     const [pathname, setPathname] = React.useState(null)
+    const [showAppName, setShowAppName] = React.useState(true)
 
     React.useEffect(() => {
         setPathname(location.pathname)
@@ -116,10 +117,12 @@ export default function MiniDrawer({ children }) {
 
     const handleDrawerOpen = () => {
         setOpen(true);
+        setShowAppName(false)
     };
 
     const handleDrawerClose = () => {
         setOpen(false);
+        setShowAppName(true)
     };
 
     return (
@@ -140,7 +143,11 @@ export default function MiniDrawer({ children }) {
                         <MenuIcon />
                     </IconButton>
                     <ListItemButton>
-                        <ListItemText className='h-[33px] w-[5em] flex items-center m-0'>We App</ListItemText>
+                        <ListItemText className='h-[33px] w-[5em] flex items-center m-0'>
+                            {
+                                showAppName && "We App"
+                            }
+                        </ListItemText>
                     </ListItemButton>
                     <ListItemButton onClick={() => router.push("/profile")} className="flex flex-row-reverse gap-[1em] items-center ml-[auto]">
                         <ListItemIcon>
@@ -152,6 +159,13 @@ export default function MiniDrawer({ children }) {
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
+                    <ListItemButton>
+                        <ListItemText className='h-[33px] w-[5em] flex justify-start font-bold items-center m-0'>
+                            {
+                                !showAppName && "We App"
+                            }
+                        </ListItemText>
+                    </ListItemButton>
                     <IconButton onClick={handleDrawerClose}>
                         {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
                     </IconButton>
