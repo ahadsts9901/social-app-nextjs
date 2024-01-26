@@ -131,7 +131,7 @@ const Create = () => {
                 clientSuccessMessage && <AlertMUI status="success" text={clientSuccessMessage} />
             }
             <MiniDrawer>
-                <div className='w-[100%] h-[90%] flex createCont gap-8'>
+                <div className='w-[100%] h-[90%] flex createCont gap-8 p-8'>
                     <div className="h-[100%] flex-1 flex flex-col gap-8">
                         <textarea ref={textRef} placeholder={(selectedImage || selectedVideo) ? "Add a caption" : "Share a thought....!!"} className='resize-none outline-none bg-inherit h-[100%] hide-scrollbar'
                             onChange={(e) => {

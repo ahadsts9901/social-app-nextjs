@@ -56,7 +56,7 @@ export const POST = async (req, res) => {
             authorImage: userData.profilePhoto,
             authorName: `${userData.firstName} ${userData.lastName}`,
             authorId: userData._id,
-            text: text,
+            text: text ?? null,
             media: uploadedFile?.url ?? null,
             mediaType: uploadedFile?.resource_type ?? null,
         })

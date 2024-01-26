@@ -69,3 +69,7 @@ body {
 .hide-scrollbar::-moz-scrollbar {
   display: none;
 }
+
+.homeMainCont{
+  padding: 0!important;
+}

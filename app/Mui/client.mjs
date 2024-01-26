@@ -50,8 +50,8 @@ export const theme = {
             contrastText: '#F0F3F4',
         },
         text: {
-            primary: '#0F1924',
-            secondary: '#6B7E93',
+            primary: '#555',
+            secondary: '#777',
         },
         background: {
             default: '#F8FAFC',

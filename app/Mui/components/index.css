@@ -1,9 +1,99 @@
+.MuiDrawer-paperAnchorLeft {
+    z-index: 5 !important;
+}
+
+.MuiCardHeader-title {
+    font-weight: 600 !important;
+    font-size: 18px !important;
+}
+
+.bigText {
+    font-size: 20px !important;
+    text-align: center;
+    overflow-y: auto;
+    overflow-x: auto;
+    min-height: 12em !important;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-weight: bold;
+    word-wrap: break-word !important;
+    word-break: break-all;
+    font-weight: bold !important;
+}
+
+.mobile-bar {
+    display: none !important;
+}
+
+.mui-zxdg2z {
+    padding: 0 !important;
+}
+
+.color-0 {
+    background: linear-gradient(90deg, #FDBB2D 0%, #3A1C71 100%);
+    color: #e0e0e8 !important;
+}
+
+.color-1 {
+    background: linear-gradient(90deg, #9ebd13 0%, #008552 100%);
+    color: #011c10 !important;
+}
+
+.color-2 {
+    background: linear-gradient(90deg, #FC466B 0%, #3F5EFB 100%);
+    color: #fefdf2 !important;
+}
+
+.color-3 {
+    background: linear-gradient(90deg, #fcff9e 0%, #c67700 100%);
+    color: #250b00 !important;
+}
+
+.color-4 {
+    background: linear-gradient(90deg, #d53369 0%, #daae51 100%);
+    color: #1a0016 !important;
+}
+
+.color-5 {
+    background: linear-gradient(90deg, #22c1c3 0%, #fdbb2d 100%);
+    color: #333 !important;
+}
+
 @media(max-width:450px) {
     .name {
         display: none;
     }
-}
 
-.MuiDrawer-paperAnchorLeft{
-    z-index: 5!important;
+    .mui-2dum1v-MuiDrawer-docked {
+        display: none !important;
+    }
+
+    .post {
+        width: 100% !important;
+    }
+
+    .drawerIcon {
+        display: none !important;
+    }
+
+    .iconButtonDrawer {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .mobile-bar {
+        display: flex !important;
+        z-index: 20 !important;
+        overflow-x: auto !important;
+        position: sticky!important;
+        top: 0!important;
+        background-color: #fff!important;
+    }
+
+    .mui-16lloyr-MuiBottomNavigation-root{
+        width: 100%!important;
+        justify-content: start!important;
+    }
+
 }
