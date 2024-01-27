@@ -52,14 +52,28 @@ export const POST = async (req, res) => {
 
         const userData = await getUserData(req)
 
-        const response = await postModel.create({
-            authorImage: userData.profilePhoto,
-            authorName: `${userData.firstName} ${userData.lastName}`,
-            authorId: userData._id,
-            text: text ?? null,
-            media: uploadedFile?.url ?? null,
-            mediaType: uploadedFile?.resource_type ?? null,
-        })
+        if (text === "null") {
+
+            const response = await postModel.create({
+                authorImage: userData.profilePhoto,
+                authorName: `${userData.firstName} ${userData.lastName}`,
+                authorId: userData._id,
+                text: "",
+                media: uploadedFile?.url || null,
+                mediaType: uploadedFile?.resource_type || null,
+            })
+
+        } else {
+
+            const response = await postModel.create({
+                authorImage: userData.profilePhoto,
+                authorName: `${userData.firstName} ${userData.lastName}`,
+                authorId: userData._id,
+                text: text,
+                media: uploadedFile?.url || null,
+                mediaType: uploadedFile?.resource_type || null,
+            })
+        }
 
         return NextResponse.json({
             message: "Post successful"

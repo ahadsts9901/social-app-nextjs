@@ -1,49 +1,34 @@
-import "../../mongodb.mjs";
-import { NextResponse } from 'next/server';
-import jwt from "jsonwebtoken";
-import "dotenv/config";
-import { userModel } from "../../schema.mjs";
-import { ObjectId } from "mongoose";
+import "../../mongodb.mjs"
+import { userModel } from "../../schema.mjs"
+import { NextResponse } from "next/server"
+import { getUserData } from "../../functions.mjs"
 
-export const GET = async (req, res) => {
+export const GET = async (request) => {
     try {
-        const hart = req.cookies.get("hart")?.value;
 
-        if (!hart) {
-            return NextResponse.json({
-                error: "No token found",
-                status: 400
-            });
-        }
+        const user = await getUserData(request)
 
-        const currentUser = jwt.verify(hart, process.env.JWT_SECRET);
+        const response = await userModel.findOne({ email: user.email })
 
-        const userData = await userModel.findById(currentUser._id);
-
-        if (!userData) {
-            return NextResponse.json({
-                error: "User not found",
-                status: 404
-            });
+        const currentUser = {
+            firstName: response.firstName,
+            lastName: response.lastName,
+            email: response.email,
+            _id: response._id,
+            profilePhoto: response.profilePhoto,
+            isAdmin: response.isAdmin,
+            createdOn: response.createdOn,
         }
 
         return NextResponse.json({
             message: "User fetched successfully",
-            data: {
-                firstName: userData.firstName,
-                lastName: userData.lastName,
-                email: userData.email,
-                _id: userData._id,
-                profilePhoto: userData.profilePhoto,
-                isAdmin: userData.isAdmin,
-                createdOn: userData.createdOn,
-            }
-        });
+            data: currentUser,
+        })
+
     } catch (error) {
-        console.error(error);
+        console.log(error);
         return NextResponse.json({
-            error: "An unknown error occurred",
-            status: 500
-        });
+            message: "An unknown error occured"
+        }, { status: 500 })
     }
-};
+}
