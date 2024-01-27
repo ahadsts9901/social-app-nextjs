@@ -1,6 +1,6 @@
-.MuiDrawer-paperAnchorLeft {
-    z-index: 5 !important;
-}
+/* .MuiDrawer-paperAnchorLeft {
+    z-index: 9998 !important;
+} */
 
 .MuiCardHeader-title {
     font-weight: 600 !important;
@@ -28,6 +28,10 @@
 
 .mui-zxdg2z {
     padding: 0 !important;
+}
+
+.mobile-icons-appbar {
+    display: none !important;
 }
 
 .color-0 {
@@ -60,6 +64,19 @@
     color: #333 !important;
 }
 
+@media(max-width:530px) {
+    .drawerPaddingCont {
+        display: none !important;
+    }
+}
+
+@media (max-width: 520px) {
+
+    .drawerIcon {
+        display: none !important;
+    }
+}
+
 @media(max-width:450px) {
     .name {
         display: none;
@@ -69,12 +86,16 @@
         display: none !important;
     }
 
-    .post {
+    .mui-de1c49 {
         width: 100% !important;
     }
 
-    .drawerIcon {
+    .mui-bpnhhg {
         display: none !important;
+    }
+
+    .post {
+        width: 100% !important;
     }
 
     .iconButtonDrawer {
@@ -86,14 +107,26 @@
         display: flex !important;
         z-index: 20 !important;
         overflow-x: auto !important;
-        position: sticky!important;
-        top: 0!important;
-        background-color: #fff!important;
+        position: sticky !important;
+        top: 0 !important;
+        background-color: #fff !important;
     }
 
-    .mui-16lloyr-MuiBottomNavigation-root{
-        width: 100%!important;
-        justify-content: start!important;
+    .mui-16lloyr-MuiBottomNavigation-root {
+        width: 100% !important;
+        justify-content: start !important;
+    }
+
+    .drawerPaddingCont {
+        display: block !important;
+    }
+
+    .mobile-icons-appbar {
+        display: block !important;
+    }
+
+    .appbar-profile-icon {
+        display: none !important;
     }
 
 }

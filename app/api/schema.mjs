@@ -10,7 +10,7 @@ export const otpMaxAgeInMinutes = 15;
 export const forgetPasswordOtpMaxAgeInMinutes = 15;
 export const initialSessionInDays = 15;
 export const extendedSessionInDays = 30;
-export const profilePicture = "https://res.cloudinary.com/dcvxjvvhu/image/upload/v1706001134/profile-picture_ea7eaq.png"
+export const profilePicture = "https://res.cloudinary.com/do6sd9nyx/image/upload/v1706343891/we-app-nextjs/Assets/profile-picture_ufgahm.png"
 
 // user schema
 let userSchema = new mongoose.Schema({

@@ -54,7 +54,7 @@ export const theme = {
             secondary: '#777',
         },
         background: {
-            default: '#F8FAFC',
+            default: '#fff',
         },
     },
     typography: {

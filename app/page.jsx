@@ -30,10 +30,6 @@ const Page = () => {
     }
   };
 
-  useEffect(() => {
-    console.log(posts);
-  }, [posts]);
-
   return (
     <>
       <ThemeProvider theme={v2Theme}>

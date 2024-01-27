@@ -1,2 +1,2 @@
-setting the appbar
-remove chat
+working on state management
+2 pages done now edit and delete functions

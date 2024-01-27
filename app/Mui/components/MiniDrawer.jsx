@@ -100,16 +100,15 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 export default function MiniDrawer({ children }) {
 
-
     const [pathname, setPathname] = React.useState(null)
     const [showAppName, setShowAppName] = React.useState(true)
-
-    const toolBar = React.useRef()
-    const appBar = React.useRef()
 
     React.useEffect(() => {
         setPathname(location.pathname)
     }, [])
+
+    const toolBar = React.useRef()
+    const appBar = React.useRef()
 
     const currentUser = useSelector(state => state.user)
     const dispatch = useDispatch()
@@ -154,11 +153,49 @@ export default function MiniDrawer({ children }) {
         text: 'Search',
         href: '/search',
         icon: <SearchRoundedIcon />,
-    }, {
-        text: 'Admin',
-        href: '/admin',
-        icon: <AdminPanelSettingsRoundedIcon />,
     },
+    ...(currentUser.isAdmin
+        ? [
+            {
+                text: 'Admin',
+                href: '/admin',
+                icon: <AdminPanelSettingsRoundedIcon />,
+            }
+        ]
+        : []
+    ),
+    ]
+
+    const upperRoutes = [
+        {
+            text: 'Chat',
+            href: '/chat',
+            icon: <ForumRoundedIcon sx={{
+                color: "#fff",
+            }}
+                className="mb-4" />,
+        }, {
+            text: 'Search',
+            href: '/search',
+            icon: <SearchRoundedIcon sx={{
+                color: "#fff",
+            }}
+                className="mb-4" />,
+        },
+        ...(currentUser.isAdmin
+            ? [
+                {
+                    text: 'Admin',
+                    href: '/admin',
+                    icon: <AdminPanelSettingsRoundedIcon
+                        sx={{
+                            color: "#fff",
+                        }}
+                        className="mb-4" />,
+                }
+            ]
+            : []
+        ),
     ]
 
     const prevScrollY = React.useRef();
@@ -169,7 +206,7 @@ export default function MiniDrawer({ children }) {
             let currentScrollY = window.scrollY;
 
             if (toolBar.current) {
-                if (window.scrollY > 50) {
+                if (window.scrollY > 50 && window.innerWidth < 450) {
                     toolBar.current.style.display = "none";
                 }
                 else {
@@ -216,17 +253,28 @@ export default function MiniDrawer({ children }) {
                             }
                         </ListItemText>
                     </ListItemButton>
-                    <ListItemButton onClick={() => router.push("/profile")} className="iconButtonDrawer flex flex-row-reverse gap-[1em] items-center ml-[auto]">
-                        <ListItemIcon>
-                            <Image priority="true" crossOrigin="anonymous" src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
-                        </ListItemIcon>
-                        <ListItemText className='name text-right w-[10em] no-scrollbar'>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</ListItemText>
-                    </ListItemButton>
+                    {
+                        upperRoutes.map((route, index) => (
+                            <IconButton key={index} onClick={() => router.push(route.href)} className="cursor-pointer mobile-icons-appbar h-[40px]">
+                                {route.icon}
+                            </IconButton>
+                        ))
+                    }
+                    {
+                        <ListItemButton className="appbar-profile-icon" onClick={() => router.push("/profile")} >
+                            <ListItemText className='name text-right w-[10em] no-scrollbar'>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</ListItemText>
+                            <ListItemIcon className="iconButtonDrawer flex flex-row-reverse gap-[1em] items-center" >
+                                <Image priority="true" crossOrigin="anonymous" src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
+                            </ListItemIcon>
+                        </ListItemButton>
+                    }
                 </Toolbar>
                 <AppBarMUI routes={routes} ref={appBar} />
             </AppBar>
-            <Drawer variant="permanent" open={open}>
-                <DrawerHeader>
+            <Drawer variant="permanent" open={open} style={{
+                zIndex: open && "9998"
+            }}>
+                <DrawerHeader >
                     <ListItemButton>
                         <ListItemText className='h-[33px] w-[5em] flex justify-start font-bold items-center m-0'>
                             {
@@ -273,6 +321,7 @@ export default function MiniDrawer({ children }) {
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
+                <div className="p-8 drawerPaddingCont"></div>
                 {children}
             </Box>
         </Box>
