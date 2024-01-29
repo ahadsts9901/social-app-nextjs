@@ -42,7 +42,7 @@ export const POST = async(req, res) => {
     // get otp for opt time based throttling
     const otp = await otpModelEmail
         .find({
-            email: email,
+            email: email.toLowerCase(),
             createdOn: {
                 $gte: moment().subtract(24, 'hours').toDate()
             }
@@ -91,7 +91,7 @@ export const POST = async(req, res) => {
 
     // save otp code to database
     const otpResponse = await otpModelEmail.create({
-        email: email,
+        email: email.toLowerCase(),
         otpCodeHash: otpCodeHash,
     });
 

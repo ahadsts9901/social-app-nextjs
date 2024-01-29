@@ -29,7 +29,7 @@ export const POST = async (req, res) => {
             }, { status: 400 })
         }
 
-        const user = await userModel.findOne({ email: email }).exec();
+        const user = await userModel.findOne({ email: email.toLowerCase() }).exec();
 
         if (!user) {
             return NextResponse.json({

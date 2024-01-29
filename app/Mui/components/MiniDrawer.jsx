@@ -102,9 +102,11 @@ export default function MiniDrawer({ children }) {
 
     const [pathname, setPathname] = React.useState(null)
     const [showAppName, setShowAppName] = React.useState(true)
+    const [width, setWidth] = React.useState(null)
 
     React.useEffect(() => {
         setPathname(location.pathname)
+        setWidth(window.innerWidth)
     }, [])
 
     const toolBar = React.useRef()
@@ -232,43 +234,46 @@ export default function MiniDrawer({ children }) {
         <Box sx={{ display: 'flex' }}>
             <CssBaseline />
             <AppBar>
-                <Toolbar ref={toolBar} >
-                    <IconButton
-                        className="drawerIcon"
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            ...(open && { display: 'none' }),
-                        }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <ListItemButton>
-                        <ListItemText className='h-[33px] w-[5em] flex items-center m-0'>
-                            {
-                                showAppName && "We App"
-                            }
-                        </ListItemText>
-                    </ListItemButton>
-                    {
-                        upperRoutes.map((route, index) => (
-                            <IconButton key={index} onClick={() => router.push(route.href)} className="cursor-pointer mobile-icons-appbar h-[40px]">
-                                {route.icon}
+                {
+                    width < 450 && pathname !== "/" ? null :
+                        <Toolbar ref={toolBar} >
+                            <IconButton
+                                className="drawerIcon"
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                sx={{
+                                    marginRight: 5,
+                                    ...(open && { display: 'none' }),
+                                }}
+                            >
+                                <MenuIcon />
                             </IconButton>
-                        ))
-                    }
-                    {
-                        <ListItemButton className="appbar-profile-icon" onClick={() => router.push("/profile")} >
-                            <ListItemText className='name text-right w-[10em] no-scrollbar'>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</ListItemText>
-                            <ListItemIcon className="iconButtonDrawer flex flex-row-reverse gap-[1em] items-center" >
-                                <Image priority="true" crossOrigin="anonymous" src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
-                            </ListItemIcon>
-                        </ListItemButton>
-                    }
-                </Toolbar>
+                            <ListItemButton>
+                                <ListItemText className='h-[33px] w-[5em] flex items-center m-0'>
+                                    {
+                                        showAppName && "We App"
+                                    }
+                                </ListItemText>
+                            </ListItemButton>
+                            {
+                                upperRoutes.map((route, index) => (
+                                    <IconButton key={index} onClick={() => router.push(route.href)} className="cursor-pointer mobile-icons-appbar h-[40px]">
+                                        {route.icon}
+                                    </IconButton>
+                                ))
+                            }
+                            {
+                                <ListItemButton className="appbar-profile-icon" onClick={() => router.push("/profile")} >
+                                    <ListItemText className='name text-right w-[10em] no-scrollbar'>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</ListItemText>
+                                    <ListItemIcon className="iconButtonDrawer flex flex-row-reverse gap-[1em] items-center" >
+                                        <Image priority="true" crossOrigin="anonymous" src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
+                                    </ListItemIcon>
+                                </ListItemButton>
+                            }
+                        </Toolbar>
+                }
                 <AppBarMUI routes={routes} ref={appBar} />
             </AppBar>
             <Drawer variant="permanent" open={open} style={{
