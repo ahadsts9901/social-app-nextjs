@@ -145,12 +145,12 @@ const EditPost = () => {
             }
             <div className='w-[100%] h-[100%] flex editCont gap-8 p-8'>
                 <div className="h-[100%] flex-1 flex flex-col gap-8">
-                    <ArrowBackRoundedIcon style={{ fontSize: "1.2em" }} />
+                    <ArrowBackRoundedIcon style={{ fontSize: "1.5em" }} className="cursor-pointer" onClick={() => router.back()} />
                     <textarea placeholder={post?.media ? "Edit your caption..." : "Edit your post..."} className='resize-none outline-none bg-inherit h-[100%] hide-scrollbar'
                         onChange={(event) => {
                             setText(event.target.value)
                         }}
-                        value={text}
+                        value={text || ""}
                         ref={textRef}
                     ></textarea>
                     <Button onClick={submitHandler} disabled={isButtonDisabled} color="primary" variant="contained" className={`${isLoading ? "w-40" : "w-32"} flex justify-center items-center gap-8`} button="desktop">
@@ -170,13 +170,15 @@ const EditPost = () => {
                         </> : "Edit"
                     }
                 </Button>
-                <div className="editPostMediaCont">
-                    {post?.media && (
-                        post?.mediaType === "image" ? <img src={post?.media} className="w-[100%] object-contain h-[100%] object-left-top" />
-                            :
-                            <video src={post?.media} muted loop controls className="w-[100%] h-[100%] bg-black" />
-                    )}
-                </div>
+                {
+                    post?.media && <div className="editPostMediaCont">
+                        {
+                            post?.mediaType === "image" ? <img src={post?.media} className="w-[100%] object-contain h-[100%] object-left-top" />
+                                :
+                                <video src={post?.media} muted loop controls className="w-[100%] h-[100%] bg-black" />
+                        }
+                    </div>
+                }
             </div>
         </ThemeProvider >
     )
