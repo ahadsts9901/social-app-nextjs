@@ -12,9 +12,11 @@ import { useSelector } from "react-redux"
 import DialogueMUI from './DialogueMUI';
 import axios from 'axios';
 import { CircularProgress } from "@mui/material"
+import { useRouter } from 'next/navigation';
 
 export default function DropMenuMUI(props) {
 
+    const router = useRouter()
     const currentUser = useSelector(state => state.user)
 
     const [open, setOpen] = React.useState(false);
@@ -138,7 +140,10 @@ export default function DropMenuMUI(props) {
                                             currentUser._id === props.authorId ?
 
                                                 <div>
-                                                    <MenuItem onClick={handleClose}>Edit</MenuItem>
+                                                    <MenuItem onClick={() => {
+                                                        handleClose
+                                                        router.push(`edit/${props.postId}`)
+                                                    }}>Edit</MenuItem>
                                                     <MenuItem onClick={() => {
                                                         handleClose
                                                         setShowDialogueBox(true)

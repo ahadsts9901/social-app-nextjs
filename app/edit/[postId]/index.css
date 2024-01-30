@@ -1,0 +1,61 @@
+button[button="small"] {
+    display: none;
+}
+
+.editPostMediaCont {
+    width: 300px;
+    height: 100%;
+}
+
+@media (max-width: 750px) {
+
+    .contentCont {
+        height: 30% !important;
+        flex-direction: row;
+    }
+
+}
+
+@media(max-width:600px) {
+
+    button[button="small"] {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 16px;
+    }
+
+    button[button="desktop"] {
+        display: none;
+    }
+
+    .editCont{
+        display: flex;
+        flex-direction: column;
+    }
+
+    .editPostMediaCont{
+        height: 200px;
+    }
+
+}
+
+@media (max-width:360px){
+
+    .editPostMediaCont{
+        width: 100%;
+        height: auto;
+    }
+
+}
+
+@media (max-width: 420px) {
+    .createCont {
+        flex-direction: column !important;
+    }
+
+    .contentCont {
+        flex-direction: column;
+    }
+
+}

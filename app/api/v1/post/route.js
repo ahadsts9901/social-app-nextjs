@@ -131,3 +131,92 @@ export const DELETE = async (req) => {
     }
 
 };
+
+export const GET = async (req) => {
+
+    const postId = new URL(req.url).searchParams.get("postId")
+
+    if (!postId) {
+        return NextResponse.json({
+            message: "Post id is required"
+        }, { status: 400 })
+    }
+
+    if (!isValidObjectId(postId)) {
+        return NextResponse.json({
+            message: "Invalid post id"
+        }, { status: 400 })
+    }
+
+    try {
+
+        const post = await postModel.findById(postId)
+
+        if (!post) {
+            return NextResponse.json({
+                message: "Post not found"
+            }, { status: 404 })
+        }
+
+        return NextResponse.json({
+            message: "Post fetched successfully",
+            data: post
+        })
+
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({
+            message: "An unknown error occured"
+        }, { status: 500 })
+    }
+
+};
+
+export const PUT = async (req, res) => {
+
+    const { text } = await req.json()
+    const postId = new URL(req.url).searchParams.get("postId")
+    
+    if (!text) {
+        return NextResponse.json({
+            message: "Text is required"
+        }, { status: 400 })
+    }
+
+    if (text.trim().length > 1000) {
+        return NextResponse.json({
+            message: "Text must be less than 1000 characters"
+        }, { status: 400 })
+    }
+
+    if (text?.trim().length < 1) {
+        return NextResponse.json({
+            message: "Text too short"
+        }, { status: 400 })
+    }
+
+    try {
+
+        const post = await postModel.findById(postId)
+
+        if (!post) {
+            return NextResponse.json({
+                message: "Post not found"
+            }, { status: 404 })
+        }
+
+        post.text = text
+        await post.save()
+
+        return NextResponse.json({
+            message: "Post edited successfully"
+        })
+
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({
+            message: "An unknown error occured"
+        }, { status: 500 })
+    }
+
+};
