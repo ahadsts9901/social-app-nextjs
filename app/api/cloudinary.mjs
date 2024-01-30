@@ -1,6 +1,7 @@
 import fs from "fs"
 import { v2 as cloudinary } from "cloudinary"
 import "dotenv/config"
+import axios from "axios"
 
 // cloudinary api keys
 cloudinary.config({
@@ -31,6 +32,7 @@ export const uploadOnCloudinary = (file, folder) => {
                 if (error) {
                     reject(error)
                 }
+                console.log("cloudinary: ", result);
                 resolve(result)
             }).end(bytes)
 
@@ -42,4 +44,25 @@ export const uploadOnCloudinary = (file, folder) => {
         }
     })
 
+}
+
+export const deleteOnCloudinary = (fileUrl) => {
+    return new Promise(async (resolve, reject) => {
+        try {
+
+            if (!fileUrl) {
+                reject(new Error("File URL not provided"))
+                return null
+            }
+
+            const public_id = `we-app-nextjs/posts/${fileUrl.split("/").pop().split(".")[0]}`
+
+            const resp = await cloudinary.uploader.destroy(public_id)
+
+            resolve(resp)
+
+        } catch (error) {
+            reject(error)
+        }
+    });
 }

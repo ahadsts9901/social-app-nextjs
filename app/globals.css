@@ -73,3 +73,7 @@ body {
 .homeMainCont{
   padding: 0!important;
 }
+
+img{
+  cursor: pointer;
+}

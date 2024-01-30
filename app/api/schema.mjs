@@ -225,6 +225,10 @@ let postSchema = new mongoose.Schema({
         type: [likeSchema],
         default: []
     },
+    isDisabled: {
+        type: Boolean,
+        default: false
+    },
     createdOn: {
         type: Date,
         default: Date.now

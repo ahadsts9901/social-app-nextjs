@@ -1,8 +1,9 @@
 import "../../mongodb.mjs";
 import { NextResponse } from 'next/server';
-import { uploadOnCloudinary } from "../../cloudinary.mjs";
+import { deleteOnCloudinary, uploadOnCloudinary } from "../../cloudinary.mjs";
 import { getUserData } from "../../functions.mjs";
 import { postModel } from "../../schema.mjs";
+import { isValidObjectId } from "mongoose"
 
 export const POST = async (req, res) => {
 
@@ -77,6 +78,49 @@ export const POST = async (req, res) => {
 
         return NextResponse.json({
             message: "Post successful"
+        })
+
+    } catch (error) {
+        console.log(error);
+        return NextResponse.json({
+            message: "An unknown error occured"
+        }, { status: 500 })
+    }
+
+};
+
+export const DELETE = async (req) => {
+
+    const postId = new URL(req.url).searchParams.get("postId")
+
+    if (!postId) {
+        return NextResponse.json({
+            message: "Post id is required"
+        }, { status: 400 })
+    }
+
+    if (!isValidObjectId(postId)) {
+        return NextResponse.json({
+            message: "Invalid post id"
+        }, { status: 400 })
+    }
+
+    try {
+
+        const post = await postModel.findById(postId)
+
+        if (!post) {
+            return NextResponse.json({
+                message: "Post not found"
+            }, { status: 404 })
+        }
+
+        await deleteOnCloudinary(post.media)
+
+        const postDeleteResponse = await postModel.findByIdAndDelete(postId)
+
+        return NextResponse.json({
+            message: "Post deleted successfully"
         })
 
     } catch (error) {

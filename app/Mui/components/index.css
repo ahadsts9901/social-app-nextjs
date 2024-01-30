@@ -34,6 +34,10 @@
     display: none !important;
 }
 
+.MuiDialog-paper {
+    width: 30em !important;
+}
+
 .color-0 {
     background: linear-gradient(90deg, #FDBB2D 0%, #3A1C71 100%);
     color: #e0e0e8 !important;
@@ -74,6 +78,12 @@
 
     .drawerIcon {
         display: none !important;
+    }
+}
+
+@media(max-width:480px) {
+    .MuiDialog-paper {
+        width: 80% !important;
     }
 }
 

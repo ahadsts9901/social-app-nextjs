@@ -8,15 +8,35 @@ import axios from 'axios';
 import { useEffect, useState } from 'react';
 import PostMUI from './Mui/components/PostMUI';
 import CircularProgress from '@mui/material/CircularProgress';
+import { useDispatch } from 'react-redux'
+import { login, logout } from "./redux/user";
 
 const Page = () => {
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+
+    const fetchUser = async () => {
+      try {
+        const response = await axios.get('/api/v1/profile');
+        dispatch(login(response.data.data))
+      } catch (error) {
+        console.error(error);
+        dispatch(logout(null))
+      }
+    };
+
+    fetchUser()
+
+  }, [])
 
   const [isLoading, setIsLoading] = useState(false);
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    getPosts();
-  }, []);
+    getPosts()
+  }, [])
 
   const getPosts = async () => {
     try {
@@ -43,6 +63,7 @@ const Page = () => {
                 <PostMUI key={post._id} time={post.createdOn} authorImage={post.authorImage}
                   text={post.text} authorName={post.authorName} media={post.media}
                   likes={post.likes} authorId={post.authorId} mediaType={post.mediaType}
+                  postId={post._id} setPosts={setPosts} posts={posts}
                 />
               ))
             }
