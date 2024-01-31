@@ -18,7 +18,7 @@ body>.mui-k008qs {
   box-sizing: border-box;
 }
 
-body{
+body {
   overflow-x: hidden;
 }
 
@@ -70,14 +70,22 @@ body {
   display: none;
 }
 
-.homeMainCont{
-  padding: 0!important;
+.homeMainCont {
+  padding: 0 !important;
 }
 
-img{
+img {
   cursor: pointer;
 }
 
-.dropShadow{
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5)!important;
+.dropShadow {
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+}
+
+.MuiInputBase-inputMultiline::-webkit-scrollbar {
+  display: none !important;
+}
+
+.MuiInputBase-inputMultiline::-moz-scrollbar {
+  display: none !important;
 }
