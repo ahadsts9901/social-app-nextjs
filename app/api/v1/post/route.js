@@ -115,7 +115,9 @@ export const DELETE = async (req) => {
             }, { status: 404 })
         }
 
-        await deleteOnCloudinary(post.media)
+        if (post.media) {
+            await deleteOnCloudinary(post.media)
+        }
 
         const postDeleteResponse = await postModel.findByIdAndDelete(postId)
 
@@ -176,7 +178,7 @@ export const PUT = async (req, res) => {
 
     const { text } = await req.json()
     const postId = new URL(req.url).searchParams.get("postId")
-    
+
     if (!text) {
         return NextResponse.json({
             message: "Text is required"
@@ -192,6 +194,12 @@ export const PUT = async (req, res) => {
     if (text?.trim().length < 1) {
         return NextResponse.json({
             message: "Text too short"
+        }, { status: 400 })
+    }
+
+    if (!isValidObjectId(postId)) {
+        return NextResponse.json({
+            message: "Invalid post id"
         }, { status: 400 })
     }
 

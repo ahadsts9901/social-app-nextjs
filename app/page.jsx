@@ -63,7 +63,7 @@ const Page = () => {
                 <PostMUI key={post._id} time={post.createdOn} authorImage={post.authorImage}
                   text={post.text} authorName={post.authorName} media={post.media}
                   likes={post.likes} authorId={post.authorId} mediaType={post.mediaType}
-                  postId={post._id} setPosts={setPosts} posts={posts}
+                  postId={post._id} setPosts={setPosts} posts={posts} isDisabled={post.isDisabled}
                 />
               ))
             }

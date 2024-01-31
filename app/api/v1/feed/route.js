@@ -7,7 +7,7 @@ export const GET = async (req, res) => {
 
         const page = Number(new URL(req.url).searchParams.get("page")) || 0
 
-        const posts = await postModel.find().sort({ _id: -1 }).limit(20).skip(page).exec()
+        const posts = await postModel.find({ isDisabled: false }).sort({ _id: -1 }).limit(20).skip(page).exec()
 
         return NextResponse.json({
             message: "success",

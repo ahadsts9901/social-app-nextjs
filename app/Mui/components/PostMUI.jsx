@@ -59,6 +59,7 @@ export default function PostMUI(props) {
                                 authorId={props.authorId}
                                 setPosts={props.setPosts}
                                 posts={props.posts}
+                                isDisabled={props.isDisabled}
                             />
                         </IconButton>
                     }

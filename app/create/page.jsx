@@ -12,8 +12,11 @@ import FileUploadRoundedIcon from '@mui/icons-material/FileUploadRounded';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import AlertMUI from "../Mui/components/AlertMUI"
 import axios from "axios"
+import { useRouter } from "next/navigation"
 
 const Create = () => {
+
+    const router = useRouter()
 
     const [selectedImage, setSelectedImage] = useState(null)
     const [selectedVideo, setSelectedVideo] = useState(null)
@@ -109,6 +112,8 @@ const Create = () => {
             setTimeout(() => {
                 setClientSuccessMessage(null)
             }, 2000)
+
+            router.push("/")
 
         } catch (error) {
             console.log(error);

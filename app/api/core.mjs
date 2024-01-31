@@ -1,0 +1,1 @@
+export const baseUrl = "https://social-app-nextjs-sts.vercel.app"

@@ -21,10 +21,11 @@ export default function DropMenuMUI(props) {
 
     const [open, setOpen] = React.useState(false);
     const [showDialogueBox, setShowDialogueBox] = React.useState(false);
-    const [dialogueTitle, setDialogueTitle] = React.useState("Delete Post");
-    const [dialogueDescription, setDialogueDescription] = React.useState("Are you sure you want to delete this post?");
-    const [disagreeButton, setDisagreeButton] = React.useState("Cancel");
-    const [agreeButton, setAgreeButton] = React.useState("Delete");
+    const [dialogueTitle, setDialogueTitle] = React.useState(null);
+    const [dialogueDescription, setDialogueDescription] = React.useState(null);
+    const [disagreeButton, setDisagreeButton] = React.useState(null);
+    const [agreeButton, setAgreeButton] = React.useState(null);
+    const [fun, setFun] = React.useState(null)
 
     const anchorRef = React.useRef(null);
 
@@ -62,7 +63,7 @@ export default function DropMenuMUI(props) {
 
         try {
 
-            setDialogueTitle(<span className='w-[100%] flex justify-center items-center'><CircularProgress /></span>)
+            setDialogueTitle(<span className='w-[100%] flex justify-center items-center mt-4'><CircularProgress /></span>)
             setDialogueDescription(<span className='w-[100%] text-center'>Deleting Post...</span>)
             setDisagreeButton("Cancel")
             setAgreeButton(null)
@@ -73,7 +74,71 @@ export default function DropMenuMUI(props) {
             setDialogueDescription(<span className='w-[100%] text-center'>{response.data.message}</span>)
             setDisagreeButton("Ok")
 
-            props.setPosts(props.posts.filter(post => post._id !== postId))
+            setTimeout(() => {
+                setShowDialogueBox(false)
+                props.setPosts(props.posts.filter(post => post._id !== postId))
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+            setDialogueTitle(<span className='w-[100%] text-center'>Oops!</span>)
+            setDialogueDescription(<span className='w-[100%] text-center'>{error.response.data.message}</span>)
+            setDisagreeButton("Ok")
+            setAgreeButton(null)
+            setTimeout(() => {
+                setShowDialogueBox(false)
+            }, 3000);
+        }
+
+    }
+
+    const disablePost = async (postId) => {
+
+        try {
+
+            setDialogueTitle(<span className='w-[100%] flex justify-center items-center mt-4'><CircularProgress /></span>)
+            setDialogueDescription(<span className='w-[100%] text-center'>Processing...</span>)
+            setDisagreeButton("Cancel")
+            setAgreeButton(null)
+
+            const response = await axios.put(`/api/v1/post/disable?postId=${postId}`)
+
+            setDialogueTitle(<span className='w-[100%] text-center'>Success</span>)
+            setDialogueDescription(<span className='w-[100%] text-center'>{response.data.message}</span>)
+            setDisagreeButton("Ok")
+
+            setTimeout(() => {
+                setShowDialogueBox(false)
+                props.setPosts(props.posts.filter(post => post._id !== postId))
+            }, 3000);
+
+        } catch (error) {
+            console.log(error);
+            setDialogueTitle(<span className='w-[100%] text-center'>Oops!</span>)
+            setDialogueDescription(<span className='w-[100%] text-center'>{error.response.data.message}</span>)
+            setDisagreeButton("Ok")
+            setAgreeButton(null)
+            setTimeout(() => {
+                setShowDialogueBox(false)
+            }, 3000);
+        }
+
+    }
+
+    const activatePost = async (postId) => {
+
+        try {
+
+            setDialogueTitle(<span className='w-[100%] flex justify-center items-center mt-4'><CircularProgress /></span>)
+            setDialogueDescription(<span className='w-[100%] text-center'>Processing...</span>)
+            setDisagreeButton("Cancel")
+            setAgreeButton(null)
+
+            const response = await axios.put(`/api/v1/post/activate?postId=${postId}`)
+
+            setDialogueTitle(<span className='w-[100%] text-center'>Success</span>)
+            setDialogueDescription(<span className='w-[100%] text-center'>{response.data.message}</span>)
+            setDisagreeButton("Ok")
 
             setTimeout(() => {
                 setShowDialogueBox(false)
@@ -96,7 +161,7 @@ export default function DropMenuMUI(props) {
         <>
             {
                 showDialogueBox && <DialogueMUI title={dialogueTitle} description={dialogueDescription}
-                    agree={agreeButton} disAgree={disagreeButton} fun={delPost} postId={props.postId}
+                    agree={agreeButton} disAgree={disagreeButton} fun={fun} postId={props.postId}
                     open={true}
                 />
             }
@@ -147,10 +212,35 @@ export default function DropMenuMUI(props) {
                                                     <MenuItem onClick={() => {
                                                         handleClose
                                                         setShowDialogueBox(true)
+                                                        setDialogueTitle("Delete Post")
+                                                        setDialogueDescription("Are you sure you want to delete this post?")
+                                                        setDisagreeButton("Cancel")
+                                                        setAgreeButton("Delete")
+                                                        setFun(() => delPost)
                                                     }}>Delete</MenuItem>
                                                 </div>
                                                 :
-                                                <MenuItem onClick={handleClose}>Disable</MenuItem>
+                                                (
+                                                    props.isDisabled ?
+                                                        <MenuItem onClick={() => {
+                                                            handleClose
+                                                            setShowDialogueBox(true)
+                                                            setDialogueTitle("Activate Post")
+                                                            setDialogueDescription("Are you sure you want to activate this post?")
+                                                            setDisagreeButton("Cancel")
+                                                            setAgreeButton("Activate")
+                                                            setFun(() => activatePost)
+                                                        }}>Activate</MenuItem>
+                                                        : <MenuItem onClick={() => {
+                                                            handleClose
+                                                            setShowDialogueBox(true)
+                                                            setDialogueTitle("Disable Post")
+                                                            setDialogueDescription("Are you sure you want to disable this post?")
+                                                            setDisagreeButton("Cancel")
+                                                            setAgreeButton("Disable")
+                                                            setFun(() => disablePost)
+                                                        }}>Disable</MenuItem>
+                                                )
                                         }
                                     </MenuList>
                                 </ClickAwayListener>
