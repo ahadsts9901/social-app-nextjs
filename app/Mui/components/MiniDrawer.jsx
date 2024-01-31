@@ -265,7 +265,7 @@ export default function MiniDrawer({ children }) {
                                 ))
                             }
                             {
-                                <ListItemButton className="appbar-profile-icon" onClick={() => router.push("/profile")} >
+                                <ListItemButton className="appbar-profile-icon" onClick={() => router.push(`/profile/${currentUser._id}`)} >
                                     <ListItemText className='name text-right w-[10em] no-scrollbar'>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</ListItemText>
                                     <ListItemIcon className="iconButtonDrawer flex flex-row-reverse gap-[1em] items-center" >
                                         <Image priority="true" crossOrigin="anonymous" src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
