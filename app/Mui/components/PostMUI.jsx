@@ -52,7 +52,7 @@ export default function PostMUI(props) {
                     }
 
                     action={
-                        (props.authorId === currentUser._id || currentUser.isAdmin) &&
+                        (props.authorId === currentUser?._id || currentUser?.isAdmin) &&
                         <IconButton aria-label="settings" style={{ padding: "6px" }}>
                             <DropMenuMUI
                                 postId={props.postId}

@@ -11,12 +11,18 @@ export const forgetPasswordOtpMaxAgeInMinutes = 15;
 export const initialSessionInDays = 15;
 export const extendedSessionInDays = 30;
 export const profilePicture = "https://res.cloudinary.com/do6sd9nyx/image/upload/v1706343891/we-app-nextjs/Assets/profile-picture_ufgahm.png"
+export const coverPhoto = "https://res.cloudinary.com/do6sd9nyx/image/upload/v1706699220/we-app-nextjs/Assets/cover-photo_efzrvu.avif"
 
 // user schema
 let userSchema = new mongoose.Schema({
     profilePhoto: {
         type: String,
         default: profilePicture,
+        maxlength: 1000,
+    },
+    coverPhoto: {
+        type: String,
+        default: coverPhoto,
         maxlength: 1000,
     },
     firstName: {
@@ -41,6 +47,12 @@ let userSchema = new mongoose.Schema({
         maxlength: 100,
         trim: true,
         match: emailPattern
+    },
+    bio: {
+        type: String,
+        maxlength: 200,
+        trim: true,
+        default: null
     },
     password: {
         type: String,

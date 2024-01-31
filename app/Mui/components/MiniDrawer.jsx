@@ -109,6 +109,20 @@ export default function MiniDrawer({ children }) {
         setWidth(window.innerWidth)
     }, [])
 
+    React.useEffect(() => {
+
+        const handleResize = () => {
+            setWidth(window.innerWidth);
+        };
+
+        window.addEventListener('resize', handleResize);
+
+        return () => {
+            window.removeEventListener('resize', handleResize);
+        };
+
+    }, []);
+
     const toolBar = React.useRef()
     const appBar = React.useRef()
 
@@ -156,7 +170,7 @@ export default function MiniDrawer({ children }) {
         href: '/search',
         icon: <SearchRoundedIcon />,
     },
-    ...(currentUser.isAdmin
+    ...(currentUser?.isAdmin
         ? [
             {
                 text: 'Admin',
@@ -184,7 +198,7 @@ export default function MiniDrawer({ children }) {
             }}
                 className="mb-4" />,
         },
-        ...(currentUser.isAdmin
+        ...(currentUser?.isAdmin
             ? [
                 {
                     text: 'Admin',
@@ -265,10 +279,10 @@ export default function MiniDrawer({ children }) {
                                 ))
                             }
                             {
-                                <ListItemButton className="appbar-profile-icon" onClick={() => router.push(`/profile/${currentUser._id}`)} >
-                                    <ListItemText className='name text-right w-[10em] no-scrollbar'>{`${currentUser.firstName || ""} ${currentUser.lastName || ""}`}</ListItemText>
+                                <ListItemButton className="appbar-profile-icon" onClick={() => router.push(`/profile/${currentUser?._id}`)} >
+                                    <ListItemText className='name text-right w-[10em] no-scrollbar'>{`${currentUser?.firstName || ""} ${currentUser?.lastName || ""}`}</ListItemText>
                                     <ListItemIcon className="iconButtonDrawer flex flex-row-reverse gap-[1em] items-center" >
-                                        <Image priority="true" crossOrigin="anonymous" src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
+                                        <Image priority="true" crossOrigin="anonymous" src={currentUser?.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[40px] h-[40px] object-cover rounded-[100%]' />
                                     </ListItemIcon>
                                 </ListItemButton>
                             }
@@ -326,7 +340,9 @@ export default function MiniDrawer({ children }) {
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
-                <div className="p-8 drawerPaddingCont"></div>
+                {
+                    pathname?.startsWith("/profile") ? null : <div className="p-8 drawerPaddingCont"></div>
+                }
                 {children}
             </Box>
         </Box>

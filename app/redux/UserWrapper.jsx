@@ -11,7 +11,7 @@ const UserWrapper = ({ children }) => {
 
         const fetchUser = async () => {
             try {
-                const response = await axios.get('/api/v1/profile');
+                const response = await axios.get('/api/v1/ping');
                 dispatch(login(response.data.data))
             } catch (error) {
                 console.error(error);

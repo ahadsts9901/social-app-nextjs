@@ -207,7 +207,7 @@ export default function DropMenuMUI(props) {
                                                 <div>
                                                     <MenuItem onClick={() => {
                                                         handleClose
-                                                        router.push(`edit/${props.postId}`)
+                                                        router.push(`/edit/${props.postId}`)
                                                     }}>Edit</MenuItem>
                                                     <MenuItem onClick={() => {
                                                         handleClose

@@ -48,8 +48,8 @@ const AppBarMUI = React.forwardRef((props, ref) => {
     },
     {
         text: "",
-        href: '/profile',
-        icon: <Image priority="true" crossOrigin="anonymous" src={currentUser.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[30px] h-[30px] object-cover rounded-[100%]' />,
+        href: `/profile/${currentUser?._id}`,
+        icon: <Image priority="true" crossOrigin="anonymous" src={currentUser?.profilePhoto || profilePicture} alt="profile picture" width={40} height={40} className='cursor-pointer w-[30px] h-[30px] object-cover rounded-[100%]' />,
     }
     ]
 
