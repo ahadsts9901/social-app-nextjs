@@ -14,10 +14,10 @@ export const theme = {
             contrastText: '#EEF4F6',
         },
         secondary: {
-            light: '#BCD4DC',
-            main: '#9BBECA',
-            dark: '#79A9B9',
-            contrastText: '#303030',
+            light: '#fff',
+            main: '#fff',
+            dark: '#fff',
+            contrastText: '#364B63',
         },
         success: {
             light: '#19B373',
@@ -67,7 +67,17 @@ export const theme = {
                 root: {
                     textTransform: 'none',
                     borderRadius: '50px',
-                }
+                    padding: "10px 20px"
+                },
+                containedSecondary: {
+                    border: "1px solid #364B63",
+                    boxShadow: "none",
+                    "&:hover": {
+                        boxShadow: "none",
+                        border: "2px solid #364B63",
+                        padding: "8.75px 19px"
+                    }
+                },
             }
         }
     }

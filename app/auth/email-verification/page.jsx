@@ -22,7 +22,6 @@ import { MuiOtpInput } from "mui-one-time-password-input";
 import axios from "axios"
 import AlertMUI from "@/app/Mui/components/AlertMUI";
 import { otpPattern } from "@/app/core.mjs";
-import { set } from "mongoose";
 
 function Copyright(props) {
   return (

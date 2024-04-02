@@ -9,6 +9,7 @@ import TextFieldMUI from '../Mui/components/TextFieldMUI';
 import { ThemeProvider } from '@emotion/react';
 import { v2Theme } from '../Mui/client.mjs';
 import { Button, Divider } from '@mui/material';
+import { MuiOtpInput } from "mui-one-time-password-input";
 
 const Settings = () => {
 
@@ -26,6 +27,13 @@ const Settings = () => {
     const [lastName, setLastName] = useState(currentUser?.lastName)
     const [bio, setBio] = useState(currentUser?.bio)
     const [email, setEmail] = useState(currentUser?.email)
+    const [otp, setOtp] = useState("")
+
+    const handleChange = async (newValue) => {
+
+        setOtp(newValue);
+
+    };
 
     return (
         <ThemeProvider theme={v2Theme}>
@@ -53,9 +61,19 @@ const Settings = () => {
                             <div className="pt-2"></div>
                             <div className='flex flex-col gap-8'>
                                 <TextFieldMUI label="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-                                <Button color='primary' variant='contained' sx={{marginTop: 1}}>Verify Email</Button>
+                                <Button color='secondary' variant='contained' sx={{ marginTop: 1 }}>Send Verification Email</Button>
                             </div>
                             <div className="pt-2"></div>
+                            <MuiOtpInput
+                                type="number"
+                                length={6}
+                                value={otp}
+                                onChange={handleChange}
+                                style={{
+                                    margin: "32px 0",
+                                }}
+                            />
+                            <Button color='primary' variant='contained' sx={{marginTop: "2.7rem"}}>Verify Email</Button>
                         </div>
                     </>
                 </div>
